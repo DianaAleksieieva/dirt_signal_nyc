@@ -8,23 +8,37 @@ export default function Navbar() {
 
   const linkStyle = (path) => ({
     marginRight: "20px",
-    padding: "8px 12px",
-    borderRadius: "6px",
-    background: pathname === path ? "#e5e7eb" : "transparent",
+    padding: "8px 16px",
+    borderRadius: "8px",
     textDecoration: "none",
-    color: "#111",
+    color: pathname === path ? "#0e4f33" : "#0d3323",
+    background: pathname === path ? "#d5efe2" : "transparent",
+    fontWeight: pathname === path ? "600" : "500",
+    transition: "0.2s",
   });
 
   return (
-    <nav style={{
-      display: "flex",
-      alignItems: "center",
-      padding: "12px 20px",
-      borderBottom: "1px solid #ddd",
-      background: "#fafafa"
-    }}>
-      <Link href="/" style={linkStyle("/")}>Home</Link>
-      <Link href="/map" style={linkStyle("/map")}>Map</Link>
+    <nav
+      style={{
+        display: "flex",
+        alignItems: "center",
+        padding: "14px 24px",
+        borderBottom: "1px solid #e5e5e5",
+        background: "#f7f6f2",
+        position: "sticky",
+        top: 0,
+        zIndex: 50,
+      }}
+    >
+      <Link href="/" style={linkStyle("/")}>
+        Home
+      </Link>
+      <Link href="/map" style={linkStyle("/map")}>
+        Map
+      </Link>
+      <Link href="/analysis" style={linkStyle("/Analysis")}>
+        Analysis
+      </Link>
     </nav>
   );
 }

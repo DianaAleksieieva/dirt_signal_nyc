@@ -5,6 +5,9 @@ import Navbar from "./components/Navbar";
 export const metadata = {
   title: "NYC Cleanliness App",
   description: "Visualizing NYC cleanliness and garbage density",
+  icons: {
+    icon: "/buildings.png",
+  },
 };
 
 export default function RootLayout({ children }) {

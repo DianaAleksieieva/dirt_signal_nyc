@@ -1,26 +1,25 @@
 @import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f7f6f2;
+  --foreground: #0d3323;
+
+  /* ECO PALETTE */
+  --eco-green-dark: #0e4f33;
+  --eco-green-soft: #d5efe2;
+  --eco-beige: #f7f6f2;
+  --eco-text-dark: #0d3323;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@theme {
+  --color-eco-green-dark: var(--eco-green-dark);
+  --color-eco-green-soft: var(--eco-green-soft);
+  --color-eco-beige: var(--eco-beige);
+  --color-eco-text-dark: var(--eco-text-dark);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
 }
