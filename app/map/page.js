@@ -5,11 +5,9 @@ import Map311Client from "./Map311Client";
 export default function MapPage() {
   return (
     <div className="min-h-screen bg-eco-beige text-eco-text pt-0 px-6 pb-6">
-
-
-      <div className="flex flex-col lg:flex-row gap-6">
+      <div className="h-full flex flex-col lg:flex-row gap-6">
         {/* MAP SECTION */}
-        <div className="lg:w-4/5 w-full">
+        <div className="lg:w-4/5 w-full flex flex-col h-[70vh] lg:h-[80vh]">
           {/* BUTTON BAR ABOVE MAP */}
           <div className="mb-4 flex flex-wrap gap-3">
             <button className="px-4 py-2 rounded-lg bg-eco-green-soft text-eco-green-dark font-medium shadow-sm hover:bg-eco-green-dark hover:text-white transition">
@@ -33,14 +31,14 @@ export default function MapPage() {
             </button>
           </div>
 
-          {/* THE MAP */}
-          <div className="rounded-xl h-[500px]">
+          {/* MAP FILLS REMAINING HEIGHT */}
+          <div className="rounded-xl flex-1 min-h-[300px]">
             <Map311Client />
           </div>
         </div>
 
         {/* DESCRIPTION SECTION */}
-        <div className="lg:w-1/4 w-full bg-eco-green-soft p-5 rounded-xl shadow-sm space-y-5">
+        <div className="lg:w-1/4 w-full bg-eco-green-soft p-5 rounded-xl shadow-sm space-y-5 h-[70vh] lg:h-[80vh] overflow-y-auto">
           <h2 className="text-xl font-semibold text-eco-green-dark">
             NYC Cleanliness
           </h2>
