@@ -1,6 +1,8 @@
 # DirtSignal
 DirtSignal is an interactive platform that maps NYC’s cleanliness patterns in real time. It combines 311 trash reports and litter basket locations. The project discovers underserved areas, showing where streets get dirtiest fastest, and helping citizens and planners make smarter, cleaner decisions for the city.
 
+Live page: https://dirtsignalnyc.vercel.app/
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started

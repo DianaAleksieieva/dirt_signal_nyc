@@ -9,18 +9,18 @@ export default function Home() {
       </h1>
 
       {/* DESCRIPTION */}
-      <section class="hero py-12 pt-2">
-        <div class="max-w-3xl mx-auto text-center">
-          <h2 class="text-xl font-semibold mb-6 italic">
+      <section className="hero py-12 pt-2">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-xl font-semibold mb-6 italic">
             See your city. Understand it. Improve it.
           </h2>
 
-          <p class="mb-4">
+          <p className="mb-4">
             New York is one of the most extraordinary places on Earth. Yet
             despite massive daily cleaning efforts, many streets still struggle
             with overflowing bins, scattered litter, and uneven sanitation.</p>
 
-          <p class="mb-4">
+          <p className="mb-4">
             <strong> CleanSight NYC</strong> analyzes which places have the most
             problems with cleanliness. We using <strong>311 cleanliness complaints </strong> and{" "}
             <strong>DSNY waste tonnage data</strong>, to transform
@@ -30,14 +30,14 @@ export default function Home() {
             cleaner environment.
           </p>
 
-          <p class="mb-4">
+          <p className="mb-4">
             We beliave when people can truly
             <em>see</em> the conditions around them, they become part of the
             solution.
           </p>
 
-          <p class="mb-2">A cleaner city doesn’t start with more rules.</p>
-          <p class="font-semibold">
+          <p className="mb-2">A cleaner city doesn’t start with more rules.</p>
+          <p className="font-semibold">
             It starts with <strong>more understanding</strong>.<br />
             And understanding starts here.
           </p>
