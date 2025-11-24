@@ -3,6 +3,9 @@
 import Map311Client from "./Map311Client";
 
 export default function MapPage() {
+
+  
+
   return (
     <div className="min-h-screen bg-eco-beige text-eco-text pt-0 px-6 pb-6">
       <div className="h-full flex flex-col lg:flex-row gap-6">
