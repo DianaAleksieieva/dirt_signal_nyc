@@ -9,6 +9,7 @@
 ### Aggregated Data
 - `aggregated_records.csv` - Aggregated on `year_month`,`NTA2020`,`Complaint Type`
 - `aggregated_complaint_census_tract.csv` - Aggregated on `year_month`,`census_tract_id`,`Complaint Type`
+- `aggregated_complaint_community_district.csv` - Aggregated on `year_month`,`census_tract_id`,`BoroCd`
 
 ### Geographical Data
 - `nta_boundaries.geojson` - Neighborhood Tabulation Areas boundaries
