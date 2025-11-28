@@ -9,7 +9,14 @@ export default function MapPage() {
 
   // NEW: Second-level filters for 311
   const [period, setPeriod] = useState("month"); // "month" | "year"
-  const [complaintType, setComplaintType] = useState("type1"); // type1..type4
+  const [complaintType, setComplaintType] = useState("All"); // type1..type4
+
+  const typeMappings = {
+    All: "All",
+    Collection: "Collection",
+    Sweeping: "Sweeping",
+    Basket: "Basket",
+  };
 
   return (
     <div className="min-h-screen bg-eco-beige text-eco-text pt-0 px-6 pb-6">
@@ -81,7 +88,7 @@ export default function MapPage() {
 
               {/* TYPE FILTER */}
               <div className="flex gap-2">
-                {["type1", "type2", "type3", "type4"].map((t) => (
+                {Object.keys(typeMappings).map((t) => (
                   <button
                     key={t}
                     onClick={() => setComplaintType(t)}
@@ -92,7 +99,7 @@ export default function MapPage() {
                 : "bg-[#E5F4EC] text-eco-green-dark hover:bg-[#198657] hover:text-white"
             }`}
                   >
-                    {t.replace("type", "Type ")}
+                    {typeMappings[t]}
                   </button>
                 ))}
               </div>

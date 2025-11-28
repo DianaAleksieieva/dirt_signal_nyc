@@ -57,6 +57,7 @@ export default function MapController({ layer, period, complaintType }) {
         <Map311Layer
           data={geojson}
           complaints={complaintData}
+          complaintType={complaintType}
           onScaleCreated={handleScaleCreated}
         />
       )}

@@ -17,16 +17,18 @@ const COUNT_PALETTE = [
   "#00441b",
 ];
 
-export default function Map311Layer({ data, complaints: allComplaints, onScaleCreated }) {
+export default function Map311Layer({ data, complaints: allComplaints, complaintType, onScaleCreated }) {
 
   // Memoize the calculation of complaint counts
   const complaintsByGeoID = useMemo(() => {
-    if (!allComplaints) return new Map();
+    if (!allComplaints || !complaintType) return new Map();
 
     const complaints = new Map();
-    const allTypeData = allComplaints["Basket Complaint"] || {};
+    // Use the complaintType prop to get the correct data
+    console.log("Calculating complaints for type:", complaintType);
+    const typeData = allComplaints[complaintType] || {};
 
-    for (const yearMonth of Object.values(allTypeData)) {
+    for (const yearMonth of Object.values(typeData)) {
       for (const [geoid, count] of Object.entries(yearMonth)) {
         complaints.set(geoid, (complaints.get(geoid) || 0) + count);
       }
@@ -34,7 +36,7 @@ export default function Map311Layer({ data, complaints: allComplaints, onScaleCr
     //console.log(complaints);
 
     return complaints;
-  }, [allComplaints]);
+  }, [allComplaints, complaintType]);
 
   const scale = useMemo(() => {
     const counts = Array.from(complaintsByGeoID.values()).filter((c) => c > 0);
