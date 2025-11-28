@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { scaleQuantile } from "d3-scale";
 import { GeoJSON } from "react-leaflet";
 
@@ -42,7 +42,6 @@ export default function Map311Layer({
       endYear && endMonth
         ? `${endYear}-${String(endMonth).padStart(2, "0")}`
         : null;
-    console.log(startRange, endRange, complaintType)
 
     for (const [yearMonth, geoData] of Object.entries(typeData)) {
       const isAfterStart = !startRange || yearMonth >= startRange;
@@ -90,11 +89,29 @@ export default function Map311Layer({
     }
   }, [scale, onScaleCreated]);
 
+  const geoJsonRef = useRef(null);
+
+  useEffect(() => {
+    if (!geoJsonRef.current) {
+      return;
+    }
+    geoJsonRef.current.eachLayer((layer) => {
+      const tractId = layer.feature.properties?.GEOID;
+      const name =
+        layer.feature.properties?.name ||
+        layer.feature.properties?.NAMELSAD ||
+        `Census Tract ${tractId}`;
+      const count = complaintsByGeoID.get(tractId) || 0;
+      layer.bindPopup(`${name}<br>Complaints: ${count}`);
+    });
+  }, [complaintsByGeoID, data]);
+
 
   if (!data) return null;
 
   return (
     <GeoJSON
+      ref={geoJsonRef}
       data={data}
       style={(feature) => {
         const tractId = feature.properties?.GEOID;
@@ -107,16 +124,6 @@ export default function Map311Layer({
           fillColor: color,
           fillOpacity: 0.7,
         };
-      }}
-      onEachFeature={(feature, layer) => {
-        const tractId = feature.properties?.GEOID;
-        const name =
-          feature.properties?.name ||
-          feature.properties?.NAMELSAD ||
-          `Census Tract ${tractId}`;
-        const count = complaintsByGeoID.get(tractId) || 0;
-
-        layer.bindPopup(`${name}<br>Complaints: ${count}`);
       }}
     />
   );
