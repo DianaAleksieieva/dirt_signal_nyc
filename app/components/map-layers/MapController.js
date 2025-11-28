@@ -7,16 +7,22 @@ const Map311Layer = dynamic(() => import("./Map311Layer"), { ssr: false });
 const MapTrashLayer = dynamic(() => import("./MapTrashLayer"), { ssr: false });
 // const MapBinsLayer = dynamic(() => import("./MapBinsLayer"), { ssr: false }); // optional
 const MapClient = dynamic(() => import("./MapClient"), { ssr: false });
+const Legend = dynamic(() => import("./Legend"), { ssr: false });
 
 export default function MapController({ layer, period, complaintType }) {
   const [geojson, setGeojson] = useState(null);
   const [complaintData, setComplaintData] = useState(null);
+  const [scale, setScale] = useState(null);
+
+  const handleScaleCreated = (newScale) => {
+    setScale(() => newScale);
+  };
 
   useEffect(() => {
     async function load() {
       // Load complaint data
       try {
-        const res = await fetch(`data/311/optimized_complaint_census_tract.json`);
+        const res = await fetch(`/data/311/optimized_complaint_census_tract.json`);
         const json = await res.json();
         setComplaintData(json);
       } catch (e) {
@@ -24,44 +30,7 @@ export default function MapController({ layer, period, complaintType }) {
         setComplaintData(null);
       }
 
-      let url = "";
-
-      // ---------------------------
-      // 1) 311 LOGIC (with 2 filters)
-      // ---------------------------
-      if (layer === "311") {
-        /**
-         * You now have:
-         * period = "month" | "year"
-         * complaintType = "type1" | "type2" | "type3" | "type4"
-         *
-         * You can name files like:
-         *   /311/type1_month.geojson
-         *   /311/type3_year.geojson
-         *   etc.
-         */
-        // url = `/311/${complaintType}_${perioad}.geojson`;
-        url = `data/311/NYC_census_tract.geojson`;
-      }
-
-      // ---------------------------
-      // 2) TRASH DATASET
-      // ---------------------------
-      else if (layer === "trash") {
-        // url = "/trash/trash_dataset.geojson";
-        url = `data/311/NYC_census_tract.geojson`;
-      }
-
-      // ---------------------------
-      // 3) DSNY BINS
-      // ---------------------------
-      else if (layer === "bins") {
-        // url = "/bins/bins_dataset.geojson";
-        url = `data/311/NYC_census_tract.geojson`;
-      }
-
-      // Fallback (avoid fetch errors)
-      if (!url) return;
+      let url = "/data/311/NYC_census_tract.geojson";
 
       try {
         const res = await fetch(url);
@@ -74,13 +43,26 @@ export default function MapController({ layer, period, complaintType }) {
     }
 
     load();
-  }, [layer, period, complaintType]);  // IMPORTANT: all filters trigger reload
+  }, [layer, period, complaintType]);
+
+  useEffect(() => {
+    if (layer !== "311") {
+      setScale(null);
+    }
+  }, [layer]);
 
   return (
     <MapClient>
-      {layer === "311" && <Map311Layer data={geojson} complaints={complaintData} />}
+      {layer === "311" && (
+        <Map311Layer
+          data={geojson}
+          complaints={complaintData}
+          onScaleCreated={handleScaleCreated}
+        />
+      )}
       {layer === "trash" && <MapTrashLayer data={geojson} />}
       {/* {layer === "bins" && <MapBinsLayer data={geojson} />} */}
+      <Legend scale={scale} />
     </MapClient>
   );
 }

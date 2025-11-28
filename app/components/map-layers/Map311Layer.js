@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { scaleQuantile } from "d3-scale";
+import { GeoJSON } from "react-leaflet";
 
 // The new color scale for complaint counts
 const COUNT_PALETTE = [
@@ -16,16 +17,7 @@ const COUNT_PALETTE = [
   "#00441b",
 ];
 
-export default function Map311Layer({ data, complaints: allComplaints }) {
-  const [GeoJSON, setGeoJSON] = useState(null);
-
-  useEffect(() => {
-    async function load() {
-      const rl = await import("react-leaflet");
-      setGeoJSON(() => rl.GeoJSON);
-    }
-    load();
-  }, []);
+export default function Map311Layer({ data, complaints: allComplaints, onScaleCreated }) {
 
   // Memoize the calculation of complaint counts
   const complaintsByGeoID = useMemo(() => {
@@ -44,21 +36,33 @@ export default function Map311Layer({ data, complaints: allComplaints }) {
     return complaints;
   }, [allComplaints]);
 
-  const colorScale = useMemo(() => {
+  const scale = useMemo(() => {
     const counts = Array.from(complaintsByGeoID.values()).filter((c) => c > 0);
     if (counts.length === 0) {
+      return null;
+    }
+    // Using slice(1) to keep the first color for 0 counts.
+    return scaleQuantile().domain(counts).range(COUNT_PALETTE.slice(1));
+  }, [complaintsByGeoID]);
+
+  const colorScale = useMemo(() => {
+    if (!scale) {
       return () => COUNT_PALETTE[0];
     }
-
-    const scale = scaleQuantile().domain(counts).range(COUNT_PALETTE.slice(1));
-
     return (count) => {
       if (count === 0) return COUNT_PALETTE[0];
       return scale(count);
     };
-  }, [complaintsByGeoID]);
+  }, [scale]);
+  
+  useEffect(() => {
+    if (onScaleCreated) {
+      onScaleCreated(scale);
+    }
+  }, [scale, onScaleCreated]);
 
-  if (!data || !GeoJSON) return null;
+
+  if (!data) return null;
 
   return (
     <GeoJSON
