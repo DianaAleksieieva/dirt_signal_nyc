@@ -5,13 +5,14 @@ import dynamic from "next/dynamic";
 
 const Map311Layer = dynamic(() => import("./Map311Layer"), { ssr: false });
 const MapTrashLayer = dynamic(() => import("./MapTrashLayer"), { ssr: false });
-// const MapBinsLayer = dynamic(() => import("./MapBinsLayer"), { ssr: false }); // optional
+const MapBinsLayer = dynamic(() => import("./MapBinsLayer"), { ssr: false });
 const MapClient = dynamic(() => import("./MapClient"), { ssr: false });
 const Legend = dynamic(() => import("./Legend"), { ssr: false });
 
 export default function MapController({
   layer,
   complaintType,
+  showBins,
   startYear,
   startMonth,
   endYear,
@@ -29,7 +30,9 @@ export default function MapController({
     async function load() {
       // Load complaint data
       try {
-        const res = await fetch(`/data/311/optimized_complaint_census_tract.json`);
+        const res = await fetch(
+          `/data/311/optimized_complaint_census_tract.json`
+        );
         const json = await res.json();
         setComplaintData(json);
       } catch (e) {
@@ -73,7 +76,7 @@ export default function MapController({
         />
       )}
       {layer === "trash" && <MapTrashLayer data={geojson} />}
-      {/* {layer === "bins" && <MapBinsLayer data={geojson} />} */}
+      {showBins && <MapBinsLayer data={geojson} />} {/* overlay */}
       <Legend scale={scale} />
     </MapClient>
   );

@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MapController from "../components/map-layers/MapController";
 import DescriptionPanel from "../components/DescriptionPanel";
 
 export default function MapPage() {
   const [layer, setLayer] = useState("311");
+
+  const [showBins, setShowBins] = useState(false);
 
   const [complaintType, setComplaintType] = useState("All");
 
@@ -14,6 +16,23 @@ export default function MapPage() {
   const [startMonth, setStartMonth] = useState(1);
   const [endYear, setEndYear] = useState(2025);
   const [endMonth, setEndMonth] = useState(12);
+  const [complaintData, setComplaintData] = useState(null);
+  const [tractMeta, setTractMeta] = useState(null);
+
+  useEffect(() => {
+    async function loadComplaintData() {
+      try {
+        const res = await fetch(
+          "/data/311/optimized_complaint_census_tract.json"
+        );
+        const json = await res.json();
+        setComplaintData(json);
+      } catch (e) {
+        console.error("❌ Error loading complaint data:", e);
+      }
+    }
+    loadComplaintData();
+  }, []);
 
   const typeMappings = {
     All: "All",
@@ -21,6 +40,32 @@ export default function MapPage() {
     Sweeping: "Sweeping",
     Basket: "Basket",
   };
+  useEffect(() => {
+    async function loadTracts() {
+      try {
+        const res = await fetch("/data/311/NYC_census_tract.geojson");
+        const json = await res.json();
+
+        const metaMap = {};
+        json.features.forEach((f) => {
+          const geo = f.properties?.GEOID;
+          if (geo) {
+            metaMap[geo] = {
+              boro: f.properties?.BoroName,
+              nta: f.properties?.NTAName,
+              cdta: f.properties?.CDTANAME,
+              label: f.properties?.CTLabel,
+            };
+          }
+        });
+
+        setTractMeta(metaMap);
+      } catch (e) {
+        console.error("❌ Error loading tracts:", e);
+      }
+    }
+    loadTracts();
+  }, []);
 
   const years = Array.from({ length: 2025 - 2010 + 1 }, (_, i) => 2025 - i);
   const months = [
@@ -44,42 +89,51 @@ export default function MapPage() {
         {/* MAP SECTION */}
         <div className="lg:w-4/5 w-full flex flex-col h-[70vh] lg:h-[80vh]">
           {/* MAIN BUTTON BAR */}
-          <div className="mb-4 flex flex-wrap gap-3">
-            <button
-              onClick={() => setLayer("311")}
-              className={`px-2.5 py-1.5 rounded text-sm shadow-sm transition
-                ${
-                  layer === "311"
-                    ? "bg-eco-green-dark text-white"
-                    : "bg-eco-green-soft text-eco-green-dark hover:bg-eco-green-dark hover:text-white"
-                }`}
-            >
-              311 Complaints
-            </button>
+          <div className="mb-4 flex flex-wrap gap-4">
+            {/* GROUP 1: 311 + BINS */}
+            <div className="flex gap-2 bg-eco-green-soft/40 px-3 py-2 rounded-lg shadow-sm">
+              {/* 311 BUTTON */}
+              <button
+                onClick={() => setLayer("311")}
+                className={`px-2.5 py-1.5 rounded text-sm shadow-sm transition
+        ${
+          layer === "311"
+            ? "bg-eco-green-dark text-white"
+            : "bg-white text-eco-green-dark hover:bg-eco-green-dark hover:text-white"
+        }`}
+              >
+                311 Complaints
+              </button>
 
-            <button
-              onClick={() => setLayer("trash")}
-              className={`px-2.5 py-1.5 rounded text-sm shadow-sm transition
-                ${
-                  layer === "trash"
-                    ? "bg-eco-green-dark text-white"
-                    : "bg-eco-green-soft text-eco-green-dark hover:bg-eco-green-dark hover:text-white"
-                }`}
-            >
-              Trash data
-            </button>
+              {/* BINS BUTTON */}
+              <button
+                onClick={() => setShowBins(!showBins)}
+                className={`px-2.5 py-1.5 rounded text-sm shadow-sm transition
+        ${
+          showBins
+            ? "bg-eco-green-dark text-white"
+            : "bg-white text-eco-green-dark hover:bg-eco-green-dark hover:text-white"
+        }`}
+              >
+                🗑️ DSNY Bins
+              </button>
+            </div>
 
-            <button
-              onClick={() => setLayer("bins")}
-              className={`px-2.5 py-1.5 rounded text-sm shadow-sm transition
-                ${
-                  layer === "bins"
-                    ? "bg-eco-green-dark text-white"
-                    : "bg-eco-green-soft text-eco-green-dark hover:bg-eco-green-dark hover:text-white"
-                }`}
-            >
-              🗑️ DSNY Bins
-            </button>
+            {/* GROUP 2: TRASH DATA */}
+            <div className="flex gap-2 bg-eco-green-soft/40 px-3 py-2 rounded-lg shadow-sm">
+              {/* TRASH BUTTON */}
+              <button
+                onClick={() => setLayer("trash")}
+                className={`px-2.5 py-1.5 rounded text-sm shadow-sm transition
+        ${
+          layer === "trash"
+            ? "bg-eco-green-dark text-white"
+            : "bg-white text-eco-green-dark hover:bg-eco-green-dark hover:text-white"
+        }`}
+              >
+                Trash data
+              </button>
+            </div>
           </div>
 
           {/* SECOND-LEVEL FILTERS FOR 311 */}
@@ -88,40 +142,60 @@ export default function MapPage() {
               {/* TIME PERIOD FILTER */}
               <div className="flex items-center gap-4 bg-eco-green-soft p-2 rounded-lg">
                 <div className="flex items-center gap-2">
-                  <label htmlFor="start-month" className="text-sm font-medium text-eco-text-dark">Start:</label>
-                  <select 
-                    id="start-month" 
+                  <label className="text-sm font-medium text-eco-text-dark">
+                    Start:
+                  </label>
+                  <select
                     value={startMonth}
                     onChange={(e) => setStartMonth(parseInt(e.target.value))}
-                    className="px-2 py-1 rounded-md text-xs shadow-sm border-none bg-white">
-                    {months.map(m => <option key={`start-month-${m.value}`} value={m.value}>{m.name}</option>)}
+                    className="px-2 py-1 rounded-md text-xs shadow-sm border-none bg-white"
+                  >
+                    {months.map((m) => (
+                      <option key={m.value} value={m.value}>
+                        {m.name}
+                      </option>
+                    ))}
                   </select>
-                  <select 
-                    id="start-year" 
+                  <select
                     value={startYear}
                     onChange={(e) => setStartYear(parseInt(e.target.value))}
-                    className="px-2 py-1 rounded-md text-xs shadow-sm border-none bg-white">
-                    {years.map(y => <option key={`start-year-${y}`} value={y}>{y}</option>)}
+                    className="px-2 py-1 rounded-md text-xs shadow-sm border-none bg-white"
+                  >
+                    {years.map((y) => (
+                      <option key={y} value={y}>
+                        {y}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
                 <div className="text-gray-400">-</div>
 
                 <div className="flex items-center gap-2">
-                  <label htmlFor="end-month" className="text-sm font-medium text-eco-text-dark">End:</label>
-                  <select 
-                    id="end-month" 
+                  <label className="text-sm font-medium text-eco-text-dark">
+                    End:
+                  </label>
+                  <select
                     value={endMonth}
                     onChange={(e) => setEndMonth(parseInt(e.target.value))}
-                    className="px-2 py-1 rounded-md text-xs shadow-sm border-none bg-white">
-                    {months.map(m => <option key={`end-month-${m.value}`} value={m.value}>{m.name}</option>)}
+                    className="px-2 py-1 rounded-md text-xs shadow-sm border-none bg-white"
+                  >
+                    {months.map((m) => (
+                      <option key={m.value} value={m.value}>
+                        {m.name}
+                      </option>
+                    ))}
                   </select>
-                  <select 
-                    id="end-year" 
+                  <select
                     value={endYear}
                     onChange={(e) => setEndYear(parseInt(e.target.value))}
-                    className="px-2 py-1 rounded-md text-xs shadow-sm border-none bg-white">
-                    {years.map(y => <option key={`end-year-${y}`} value={y}>{y}</option>)}
+                    className="px-2 py-1 rounded-md text-xs shadow-sm border-none bg-white"
+                  >
+                    {years.map((y) => (
+                      <option key={y} value={y}>
+                        {y}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>
@@ -133,11 +207,11 @@ export default function MapPage() {
                     key={t}
                     onClick={() => setComplaintType(t)}
                     className={`px-3 py-1 rounded-md text-xs font-medium shadow-sm transition
-            ${
-              complaintType === t
-                ? "bg-[#198657] text-white"
-                : "bg-[#E5F4EC] text-eco-green-dark hover:bg-[#198657] hover:text-white"
-            }`}
+                      ${
+                        complaintType === t
+                          ? "bg-[#198657] text-white"
+                          : "bg-[#E5F4EC] text-eco-green-dark hover:bg-[#198657] hover:text-white"
+                      }`}
                   >
                     {typeMappings[t]}
                   </button>
@@ -150,6 +224,7 @@ export default function MapPage() {
           <div className="rounded-xl flex-1 min-h-[300px]">
             <MapController
               layer={layer}
+              showBins={showBins}
               complaintType={complaintType}
               startYear={startYear}
               startMonth={startMonth}
@@ -160,7 +235,16 @@ export default function MapPage() {
         </div>
 
         {/* SIDEBAR DESCRIPTION */}
-        <DescriptionPanel layer={layer} />
+        <DescriptionPanel
+          layer={layer}
+          complaints={complaintData}
+          complaintType={complaintType}
+          startYear={startYear}
+          startMonth={startMonth}
+          endYear={endYear}
+          endMonth={endMonth}
+          tractMeta={tractMeta}
+        />
       </div>
     </div>
   );
