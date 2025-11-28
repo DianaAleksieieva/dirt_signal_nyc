@@ -10,9 +10,20 @@ const MapClient = dynamic(() => import("./MapClient"), { ssr: false });
 
 export default function MapController({ layer, period, complaintType }) {
   const [geojson, setGeojson] = useState(null);
+  const [complaintData, setComplaintData] = useState(null);
 
   useEffect(() => {
     async function load() {
+      // Load complaint data
+      try {
+        const res = await fetch(`data/311/optimized_complaint_census_tract.json`);
+        const json = await res.json();
+        setComplaintData(json);
+      } catch (e) {
+        console.error("❌ Error loading complaint data:", e);
+        setComplaintData(null);
+      }
+
       let url = "";
 
       // ---------------------------
@@ -37,7 +48,7 @@ export default function MapController({ layer, period, complaintType }) {
       // 2) TRASH DATASET
       // ---------------------------
       else if (layer === "trash") {
-        // url = "/trash/trash_dataset.geojson"; 
+        // url = "/trash/trash_dataset.geojson";
         url = `data/311/NYC_census_tract.geojson`;
       }
 
@@ -67,7 +78,7 @@ export default function MapController({ layer, period, complaintType }) {
 
   return (
     <MapClient>
-      {layer === "311" && <Map311Layer data={geojson} />}
+      {layer === "311" && <Map311Layer data={geojson} complaints={complaintData} />}
       {layer === "trash" && <MapTrashLayer data={geojson} />}
       {/* {layer === "bins" && <MapBinsLayer data={geojson} />} */}
     </MapClient>
