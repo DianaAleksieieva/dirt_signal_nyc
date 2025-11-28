@@ -39,3 +39,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+python/nyc311/nyc_complaints_all.csv
+python/nyc311/nyc_complaints_cleaned.csv

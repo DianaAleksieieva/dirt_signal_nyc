@@ -16,7 +16,7 @@
 - `nynta2020_25d.zip` - [Neighborhood Tabulation Areas 2020](https://www.nyc.gov/content/planning/pages/resources/datasets/neighborhood-tabulation).
 - `Community_Districts.csv` - [NYC Community Districts information](https://catalog.data.gov/dataset/community-districts-74cf7)
 - `aggregated_complaint_census_tract.json` - Aggregated on `year_month`,`census_tract_id`,`Complaint Type`
-- `optimized_complaint_census_tract.json`  - Nested Dictionary Structure: Complaint Type -> year_month -> census_tract_id -> complaint_count
+- `optimized_complaint_census_tract.json`  - Nested Dictionary Structure: Complaint Type -> year_month -> census_tract_id -> complaint_count.  Be moved to public/data/311.
 
 ### Analysis Files
 - `NYC311.ipynb` - NYC 311 EDA
