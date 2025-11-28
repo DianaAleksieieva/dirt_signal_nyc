@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
+import { scaleQuantile } from "d3-scale";
 
 // The new color scale for complaint counts
 const COUNT_PALETTE = [
@@ -14,19 +15,6 @@ const COUNT_PALETTE = [
   "#006d2c",
   "#00441b",
 ];
-
-// A simple function to get a color from the palette based on the count
-function getColorFromCount(count) {
-  if (count > 5000) return COUNT_PALETTE[8];
-  if (count > 2000) return COUNT_PALETTE[7];
-  if (count > 1000) return COUNT_PALETTE[6];
-  if (count > 500) return COUNT_PALETTE[5];
-  if (count > 200) return COUNT_PALETTE[4];
-  if (count > 100) return COUNT_PALETTE[3];
-  if (count > 50) return COUNT_PALETTE[2];
-  if (count > 10) return COUNT_PALETTE[1];
-  return COUNT_PALETTE[0];
-}
 
 export default function Map311Layer({ data, complaints: allComplaints }) {
   const [GeoJSON, setGeoJSON] = useState(null);
@@ -51,10 +39,24 @@ export default function Map311Layer({ data, complaints: allComplaints }) {
         complaints.set(geoid, (complaints.get(geoid) || 0) + count);
       }
     }
-    console.log(complaints);
+    //console.log(complaints);
 
     return complaints;
   }, [allComplaints]);
+
+  const colorScale = useMemo(() => {
+    const counts = Array.from(complaintsByGeoID.values()).filter((c) => c > 0);
+    if (counts.length === 0) {
+      return () => COUNT_PALETTE[0];
+    }
+
+    const scale = scaleQuantile().domain(counts).range(COUNT_PALETTE.slice(1));
+
+    return (count) => {
+      if (count === 0) return COUNT_PALETTE[0];
+      return scale(count);
+    };
+  }, [complaintsByGeoID]);
 
   if (!data || !GeoJSON) return null;
 
@@ -64,7 +66,7 @@ export default function Map311Layer({ data, complaints: allComplaints }) {
       style={(feature) => {
         const tractId = feature.properties?.GEOID;
         const count = complaintsByGeoID.get(tractId) || 0;
-        const color = getColorFromCount(count);
+        const color = colorScale(count);
 
         return {
           color: "#444",
