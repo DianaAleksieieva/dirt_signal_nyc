@@ -7,9 +7,13 @@ import DescriptionPanel from "../components/DescriptionPanel";
 export default function MapPage() {
   const [layer, setLayer] = useState("311");
 
-  // NEW: Second-level filters for 311
-  const [period, setPeriod] = useState("month"); // "month" | "year"
-  const [complaintType, setComplaintType] = useState("All"); // type1..type4
+  const [complaintType, setComplaintType] = useState("All");
+
+  // Date range state
+  const [startYear, setStartYear] = useState(2010);
+  const [startMonth, setStartMonth] = useState(1);
+  const [endYear, setEndYear] = useState(2025);
+  const [endMonth, setEndMonth] = useState(12);
 
   const typeMappings = {
     All: "All",
@@ -17,6 +21,22 @@ export default function MapPage() {
     Sweeping: "Sweeping",
     Basket: "Basket",
   };
+
+  const years = Array.from({ length: 2025 - 2010 + 1 }, (_, i) => 2025 - i);
+  const months = [
+    { value: 1, name: "Jan" },
+    { value: 2, name: "Feb" },
+    { value: 3, name: "Mar" },
+    { value: 4, name: "Apr" },
+    { value: 5, name: "May" },
+    { value: 6, name: "Jun" },
+    { value: 7, name: "Jul" },
+    { value: 8, name: "Aug" },
+    { value: 9, name: "Sep" },
+    { value: 10, name: "Oct" },
+    { value: 11, name: "Nov" },
+    { value: 12, name: "Dec" },
+  ];
 
   return (
     <div className="min-h-screen bg-eco-beige text-eco-text pt-0 px-6 pb-6">
@@ -64,27 +84,47 @@ export default function MapPage() {
 
           {/* SECOND-LEVEL FILTERS FOR 311 */}
           {layer === "311" && (
-            <div className="mb-4 flex flex-wrap items-center gap-2">
-              {/* PERIOD FILTER */}
-              <div className="flex gap-2">
-                {["month", "year"].map((p) => (
-                  <button
-                    key={p}
-                    onClick={() => setPeriod(p)}
-                    className={`px-3 py-1 rounded-md text-xs font-medium shadow-sm transition
-            ${
-              period === p
-                ? "bg-eco-green-dark text-white"
-                : "bg-[#A8D5BA] text-eco-text-dark hover:bg-eco-green-dark hover:text-white"
-            }`}
-                  >
-                    {p === "month" ? "Month" : "Year"}
-                  </button>
-                ))}
-              </div>
+            <div className="mb-4 flex flex-wrap items-center gap-6">
+              {/* TIME PERIOD FILTER */}
+              <div className="flex items-center gap-4 bg-eco-green-soft p-2 rounded-lg">
+                <div className="flex items-center gap-2">
+                  <label htmlFor="start-month" className="text-sm font-medium text-eco-text-dark">Start:</label>
+                  <select 
+                    id="start-month" 
+                    value={startMonth}
+                    onChange={(e) => setStartMonth(parseInt(e.target.value))}
+                    className="px-2 py-1 rounded-md text-xs shadow-sm border-none bg-white">
+                    {months.map(m => <option key={`start-month-${m.value}`} value={m.value}>{m.name}</option>)}
+                  </select>
+                  <select 
+                    id="start-year" 
+                    value={startYear}
+                    onChange={(e) => setStartYear(parseInt(e.target.value))}
+                    className="px-2 py-1 rounded-md text-xs shadow-sm border-none bg-white">
+                    {years.map(y => <option key={`start-year-${y}`} value={y}>{y}</option>)}
+                  </select>
+                </div>
 
-              {/* JUST SPACE — NOTHING VISIBLE */}
-              <div className="mx-6"></div>
+                <div className="text-gray-400">-</div>
+
+                <div className="flex items-center gap-2">
+                  <label htmlFor="end-month" className="text-sm font-medium text-eco-text-dark">End:</label>
+                  <select 
+                    id="end-month" 
+                    value={endMonth}
+                    onChange={(e) => setEndMonth(parseInt(e.target.value))}
+                    className="px-2 py-1 rounded-md text-xs shadow-sm border-none bg-white">
+                    {months.map(m => <option key={`end-month-${m.value}`} value={m.value}>{m.name}</option>)}
+                  </select>
+                  <select 
+                    id="end-year" 
+                    value={endYear}
+                    onChange={(e) => setEndYear(parseInt(e.target.value))}
+                    className="px-2 py-1 rounded-md text-xs shadow-sm border-none bg-white">
+                    {years.map(y => <option key={`end-year-${y}`} value={y}>{y}</option>)}
+                  </select>
+                </div>
+              </div>
 
               {/* TYPE FILTER */}
               <div className="flex gap-2">
@@ -110,8 +150,11 @@ export default function MapPage() {
           <div className="rounded-xl flex-1 min-h-[300px]">
             <MapController
               layer={layer}
-              period={period}
               complaintType={complaintType}
+              startYear={startYear}
+              startMonth={startMonth}
+              endYear={endYear}
+              endMonth={endMonth}
             />
           </div>
         </div>

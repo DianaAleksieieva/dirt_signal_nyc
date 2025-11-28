@@ -9,7 +9,14 @@ const MapTrashLayer = dynamic(() => import("./MapTrashLayer"), { ssr: false });
 const MapClient = dynamic(() => import("./MapClient"), { ssr: false });
 const Legend = dynamic(() => import("./Legend"), { ssr: false });
 
-export default function MapController({ layer, period, complaintType }) {
+export default function MapController({
+  layer,
+  complaintType,
+  startYear,
+  startMonth,
+  endYear,
+  endMonth,
+}) {
   const [geojson, setGeojson] = useState(null);
   const [complaintData, setComplaintData] = useState(null);
   const [scale, setScale] = useState(null);
@@ -43,7 +50,7 @@ export default function MapController({ layer, period, complaintType }) {
     }
 
     load();
-  }, [layer, period, complaintType]);
+  }, [layer, complaintType]);
 
   useEffect(() => {
     if (layer !== "311") {
@@ -59,6 +66,10 @@ export default function MapController({ layer, period, complaintType }) {
           complaints={complaintData}
           complaintType={complaintType}
           onScaleCreated={handleScaleCreated}
+          startYear={startYear}
+          startMonth={startMonth}
+          endYear={endYear}
+          endMonth={endMonth}
         />
       )}
       {layer === "trash" && <MapTrashLayer data={geojson} />}

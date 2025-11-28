@@ -4,7 +4,7 @@ import { useEffect, useMemo } from "react";
 import { scaleQuantile } from "d3-scale";
 import { GeoJSON } from "react-leaflet";
 
-// The new color scale for complaint counts
+// color scale for complaint counts
 const COUNT_PALETTE = [
   "#f7fcf5",
   "#e5f5e0",
@@ -17,26 +17,53 @@ const COUNT_PALETTE = [
   "#00441b",
 ];
 
-export default function Map311Layer({ data, complaints: allComplaints, complaintType, onScaleCreated }) {
-
+export default function Map311Layer({
+  data,
+  complaints: allComplaints,
+  complaintType,
+  onScaleCreated,
+  startYear,
+  startMonth,
+  endYear,
+  endMonth,
+}) {
   // Memoize the calculation of complaint counts
   const complaintsByGeoID = useMemo(() => {
     if (!allComplaints || !complaintType) return new Map();
 
     const complaints = new Map();
-    // Use the complaintType prop to get the correct data
-    console.log("Calculating complaints for type:", complaintType);
     const typeData = allComplaints[complaintType] || {};
 
-    for (const yearMonth of Object.values(typeData)) {
-      for (const [geoid, count] of Object.entries(yearMonth)) {
-        complaints.set(geoid, (complaints.get(geoid) || 0) + count);
+    const startRange =
+      startYear && startMonth
+        ? `${startYear}-${String(startMonth).padStart(2, "0")}`
+        : null;
+    const endRange =
+      endYear && endMonth
+        ? `${endYear}-${String(endMonth).padStart(2, "0")}`
+        : null;
+    console.log(startRange, endRange, complaintType)
+
+    for (const [yearMonth, geoData] of Object.entries(typeData)) {
+      const isAfterStart = !startRange || yearMonth >= startRange;
+      const isBeforeEnd = !endRange || yearMonth <= endRange;
+
+      if (isAfterStart && isBeforeEnd) {
+        for (const [geoid, count] of Object.entries(geoData)) {
+          complaints.set(geoid, (complaints.get(geoid) || 0) + count);
+        }
       }
     }
-    //console.log(complaints);
 
     return complaints;
-  }, [allComplaints, complaintType]);
+  }, [
+    allComplaints,
+    complaintType,
+    startYear,
+    startMonth,
+    endYear,
+    endMonth,
+  ]);
 
   const scale = useMemo(() => {
     const counts = Array.from(complaintsByGeoID.values()).filter((c) => c > 0);
