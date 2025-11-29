@@ -12,13 +12,15 @@ import {
   ResponsiveContainer,
   BarChart,
   Bar,
-  Cell
+  Cell,
 } from "recharts";
 
 export default function Analysis311() {
+
   const [useBulky, setUseBulky] = useState(true);
   const [complaints, setComplaints] = useState(null);
   const [tracts, setTracts] = useState(null);
+  const [boroughBarMode, setBoroughBarMode] = useState("total"); 
 
   /* LOAD DATA */
 
@@ -41,15 +43,17 @@ export default function Analysis311() {
         console.error("❌ Failed to load data", e);
       }
     }
+
     load();
   }, [useBulky]);
 
   const TYPES = ["Collection", "Sweeping", "Basket"];
   const COLORS = ["#198657", "#76d917", "#ff8a00"];
 
-  /* Monthly Trend */
+  /** Monthly Trend **/
   const monthlyTrend = useMemo(() => {
     if (!complaints) return [];
+
     const monthMap = {};
 
     for (const type of TYPES) {
@@ -65,9 +69,10 @@ export default function Analysis311() {
     );
   }, [complaints]);
 
-  /* Type Breakdown */
+  /** Type Breakdown **/
   const typeBreakdown = useMemo(() => {
     if (!complaints) return [];
+
     return TYPES.map((type) => {
       let total = 0;
       for (const [, geoData] of Object.entries(complaints[type] || {})) {
@@ -77,7 +82,7 @@ export default function Analysis311() {
     });
   }, [complaints]);
 
-  /* Yearly Totals */
+  /** Yearly Trend **/
   const yearlyTotals = useMemo(() => {
     if (!complaints) return [];
 
@@ -87,6 +92,7 @@ export default function Analysis311() {
       for (const [month, geoData] of Object.entries(complaints[type] || {})) {
         const year = month.split("-")[0];
         const total = Object.values(geoData).reduce((a, b) => a + b, 0);
+
         yearMap[year] = (yearMap[year] || 0) + total;
       }
     }
@@ -96,18 +102,20 @@ export default function Analysis311() {
       .map(([year, total]) => ({ year, total }));
   }, [complaints]);
 
-  /* Borough Lookup */
+  /** Borough Lookup **/
   const boroughLookup = useMemo(() => {
     if (!tracts) return {};
+
     const map = {};
     tracts.forEach((f) => {
       const { GEOID, BoroName } = f.properties;
       if (GEOID) map[GEOID] = BoroName;
     });
+
     return map;
   }, [tracts]);
 
-  /* Complaints by Borough */
+  /** Complaints by Borough (TOTAL) **/
   const complaintsByBorough = useMemo(() => {
     if (!complaints) return [];
 
@@ -118,6 +126,7 @@ export default function Analysis311() {
         for (const [geoid, count] of Object.entries(geoData)) {
           const borough = boroughLookup[geoid];
           if (!borough) continue;
+
           totals[borough] = (totals[borough] || 0) + count;
         }
       }
@@ -128,7 +137,40 @@ export default function Analysis311() {
       .sort((a, b) => b.total - a.total);
   }, [complaints, boroughLookup]);
 
-  /* BarChart needs an array */
+  /** Complaints by Borough (BY TYPE) **/
+  const boroughByType = useMemo(() => {
+    if (!complaints || !boroughLookup) return [];
+
+    const map = {};
+
+    for (const type of TYPES) {
+      for (const [, geoData] of Object.entries(complaints[type] || {})) {
+        for (const [geoid, count] of Object.entries(geoData)) {
+          const borough = boroughLookup[geoid];
+          if (!borough) continue;
+
+          if (!map[borough]) {
+            map[borough] = {
+              borough,
+              Collection: 0,
+              Sweeping: 0,
+              Basket: 0,
+            };
+          }
+
+          map[borough][type] += count;
+        }
+      }
+    }
+
+    return Object.values(map).sort((a, b) => {
+      const totalA = a.Collection + a.Sweeping + a.Basket;
+      const totalB = b.Collection + b.Sweeping + b.Basket;
+      return totalB - totalA;
+    });
+  }, [complaints, boroughLookup]);
+
+  /** BarChart → typeBreakdown **/
   const barData = useMemo(() => {
     const row = {};
     typeBreakdown.forEach((t) => (row[t.type] = t.value));
@@ -140,8 +182,9 @@ export default function Analysis311() {
     Brooklyn: "#76d917",
     Queens: "#ff8a00",
     Bronx: "#e00000",
-    "Staten Island": "#2e86de"
+    "Staten Island": "#2e86de",
   };
+
 
   if (!complaints || !tracts) {
     return (
@@ -151,7 +194,7 @@ export default function Analysis311() {
     );
   }
 
-  /*  RENDER UI */
+  /*  UI */
 
   return (
     <div className="min-h-screen bg-eco-beige text-eco-text pt-3 px-6 pb-10">
@@ -160,23 +203,21 @@ export default function Analysis311() {
         🗑️ 311 Complaint Analysis
       </h1>
 
-      {/* Toggle */}
+      {/* Bulky Toggle */}
       <div className="flex items-center gap-3 mb-6">
         <span className="text-sm text-eco-text-dark/70">Include bulky items?</span>
         <button
           onClick={() => setUseBulky((p) => !p)}
           className={`px-3 py-1 rounded text-sm shadow-sm transition ${
-            useBulky
-              ? "bg-eco-green-dark text-white"
-              : "bg-gray-300 text-gray-700"
+            useBulky ? "bg-eco-green-dark text-white" : "bg-gray-300 text-gray-700"
           }`}
         >
           {useBulky ? "YES" : "NO"}
         </button>
       </div>
 
-      {/* ⭐ Monthly Trend */}
-      <div className="bg-white/70 rounded-xl shadow-sm p-6 h-[300px]">
+      {/* ⭐ 1 — Monthly Trend */}
+      <div className="bg-white/70 rounded-xl shadow-sm p-6 h-[300px] mb-10">
         <h2 className="text-lg font-semibold text-eco-green-dark mb-3">
           Monthly Complaint Trend by Type
         </h2>
@@ -196,8 +237,8 @@ export default function Analysis311() {
         </ResponsiveContainer>
       </div>
 
-      {/* ⭐ Type Breakdown */}
-      <div className="bg-white/70 rounded-xl shadow-sm p-6 h-[300px]">
+      {/* ⭐ 2 — Type Breakdown */}
+      <div className="bg-white/70 rounded-xl shadow-sm p-6 h-[300px] mb-10">
         <h2 className="text-lg font-semibold text-eco-green-dark mb-3">
           Total Complaints by Type
         </h2>
@@ -217,8 +258,8 @@ export default function Analysis311() {
         </ResponsiveContainer>
       </div>
 
-      {/* ⭐ Yearly Trend */}
-      <div className="bg-white/70 rounded-xl shadow-sm p-6 h-[300px]">
+      {/* ⭐ 3 — Yearly Trend */}
+      <div className="bg-white/70 rounded-xl shadow-sm p-6 h-[300px] mb-10">
         <h2 className="text-lg font-semibold text-eco-green-dark mb-3">
           Total Complaints Over Years
         </h2>
@@ -231,35 +272,90 @@ export default function Analysis311() {
             <Tooltip />
             <Legend />
 
-            <Line type="monotone" dataKey="total" stroke="#198657" strokeWidth={3} dot={{ r: 4 }} />
+            <Line
+              type="monotone"
+              dataKey="total"
+              stroke="#198657"
+              strokeWidth={3}
+              dot={{ r: 5 }}
+            />
           </LineChart>
         </ResponsiveContainer>
       </div>
 
-      {/* ⭐ Borough Totals */}
-      <div className="bg-white/70 rounded-xl shadow-sm p-6 h-[300px]">
-        <h2 className="text-lg font-semibold text-eco-green-dark mb-3">
-          Complaints by Borough
-        </h2>
+      {/* Complaints by Borough (Total vs Type Breakdown) */}
+      <div className="bg-white/70 rounded-xl shadow-sm p-6 h-[330px]">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-lg font-semibold text-eco-green-dark">
+            Complaints by Borough
+          </h2>
 
-        <ResponsiveContainer width="100%" height="85%">
-          <BarChart data={complaintsByBorough}>
-            <CartesianGrid strokeDasharray="3" />
+          {/* Mode Toggle */}
+          <div className="flex items-center gap-2 text-xs">
+            <button
+              onClick={() => setBoroughBarMode("total")}
+              className={`px-2 py-1 rounded border transition ${
+                boroughBarMode === "total"
+                  ? "bg-eco-green-dark text-white border-eco-green-dark"
+                  : "bg-white text-eco-text-dark border-gray-300"
+              }`}
+            >
+              Total
+            </button>
+
+            <button
+              onClick={() => setBoroughBarMode("byType")}
+              className={`px-2 py-1 rounded border transition ${
+                boroughBarMode === "byType"
+                  ? "bg-eco-green-dark text-white border-eco-green-dark"
+                  : "bg-white text-eco-text-dark border-gray-300"
+              }`}
+            >
+              By type
+            </button>
+          </div>
+        </div>
+
+        <ResponsiveContainer width="100%" height="80%">
+          <BarChart
+            data={boroughBarMode === "total" ? complaintsByBorough : boroughByType}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="borough" />
             <YAxis />
             <Tooltip />
+            <Legend />
 
-            <Bar dataKey="total">
-              {complaintsByBorough.map((entry) => (
-                <Cell
-                  key={entry.borough}
-                  fill={BOROUGH_COLORS[entry.borough] || "#999"}
+            {boroughBarMode === "total" ? (
+              <Bar dataKey="total" name="Total complaints">
+                {complaintsByBorough.map((entry) => (
+                  <Cell
+                    key={entry.borough}
+                    fill={BOROUGH_COLORS[entry.borough] || "#999"}
+                  />
+                ))}
+              </Bar>
+            ) : (
+              <>
+                <Bar
+                  dataKey="Collection"
+                  name="Collection"
+                  fill={COLORS[TYPES.indexOf("Collection")]}
                 />
-              ))}
-            </Bar>
+                <Bar
+                  dataKey="Sweeping"
+                  name="Sweeping"
+                  fill={COLORS[TYPES.indexOf("Sweeping")]}
+                />
+                <Bar
+                  dataKey="Basket"
+                  name="Basket"
+                  fill={COLORS[TYPES.indexOf("Basket")]}
+                />
+              </>
+            )}
           </BarChart>
         </ResponsiveContainer>
-
       </div>
     </div>
   );
