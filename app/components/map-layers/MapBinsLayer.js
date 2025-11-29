@@ -64,9 +64,7 @@ export default function MapBinsLayer({ zoom }) {
 
   if (!CircleMarker || !Tooltip) return null;
 
-  // ===========================
-  // 🌟 ZOOM BEHAVIOR
-  // ===========================
+  // ZOOM 
   const SHOW_INDIVIDUAL_POINTS_ZOOM = 15;
   const showPoints = zoom >= SHOW_INDIVIDUAL_POINTS_ZOOM;
 
