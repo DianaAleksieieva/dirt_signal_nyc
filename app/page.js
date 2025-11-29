@@ -3,7 +3,6 @@ import Link from "next/link";
 export default function Home() {
   return (
     <div className="relative min-h-screen">
-
       {/* FULLSCREEN BACKGROUND IMAGE */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
@@ -12,13 +11,10 @@ export default function Home() {
         }}
       ></div>
 
-      {/* SOFT WHITE OVERLAY for readability */}
       <div className="absolute inset-0 bg-white/60 backdrop-blur-[1px] z-0"></div>
 
-      {/* MAIN CONTENT (padding stays here, NOT affecting the image) */}
+      {/* MAIN CONTENT */}
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-center text-eco-text">
-
-
         {/* TITLE */}
         <h1 className="text-4xl font-bold text-eco-green-dark mb-6 text-center drop-shadow-md">
           🗽 CleanSight NYC
@@ -33,16 +29,17 @@ export default function Home() {
 
             <p>
               New York is one of the most extraordinary places on Earth. Yet
-              despite massive daily cleaning efforts, many streets still struggle
-              with overflowing bins, scattered litter, and uneven sanitation.
+              despite massive daily cleaning efforts, many streets still
+              struggle with overflowing bins, scattered litter, and uneven
+              sanitation.
             </p>
 
             <p>
-              <strong>CleanSight NYC</strong> analyzes which places have the most
-              problems with cleanliness. We use{" "}
+              <strong>CleanSight NYC</strong> analyzes which places have the
+              most problems with cleanliness. We use{" "}
               <strong>311 cleanliness complaints</strong> and{" "}
-              <strong>DSNY waste tonnage data</strong> to transform raw city data
-              into a clear picture of how cleanliness, infrastructure, and
+              <strong>DSNY waste tonnage data</strong> to transform raw city
+              data into a clear picture of how cleanliness, infrastructure, and
               human activity interact across neighborhoods.
             </p>
 
@@ -65,7 +62,7 @@ export default function Home() {
           <Link
             href="/map"
             className="px-6 py-3 rounded-lg bg-eco-green-dark text-white font-medium shadow-md
-                       hover:bg-eco-green-soft hover:text-eco-green-dark transition text-center"
+               hover:bg-eco-green-soft hover:text-eco-green-dark transition text-center"
           >
             🗺️ Explore the Map
           </Link>
@@ -73,12 +70,19 @@ export default function Home() {
           <Link
             href="/analysis"
             className="px-6 py-3 rounded-lg bg-eco-green-dark text-white font-medium shadow-md
-                       hover:bg-eco-green-soft hover:text-eco-green-dark transition text-center"
+               hover:bg-eco-green-soft hover:text-eco-green-dark transition text-center"
           >
             📊 View Analysis
           </Link>
-        </div>
 
+          <Link
+            href="/team"
+            className="px-6 py-3 rounded-lg bg-eco-green-dark text-white font-medium shadow-md
+               hover:bg-eco-green-soft hover:text-eco-green-dark transition text-center"
+          >
+            👥 Our Team
+          </Link>
+        </div>
       </div>
     </div>
   );

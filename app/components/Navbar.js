@@ -39,6 +39,9 @@ export default function Navbar() {
       <Link href="/analysis" style={linkStyle("/Analysis")}>
         Analysis
       </Link>
+      <Link href="/team" style={linkStyle("/team")}>
+        Team
+      </Link>
     </nav>
   );
 }
