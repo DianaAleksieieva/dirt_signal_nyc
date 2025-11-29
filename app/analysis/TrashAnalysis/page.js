@@ -57,7 +57,7 @@ export default function TrashAnalysis() {
       ],
     },
     {
-      title: '🗑️ 2. Waste Per Capital (Tons per 1000 Residents) Analysis',
+      title: '🗑️ 2. Waste Per Capita (Tons per 1000 Residents) Analysis',
       description: "Some text here",
       images: [
         { id: 'uploaded:6.png-67de1078-0785-4376-8e70-2e9e574965ad', src: '/trash_charts/6.png', alt: 'Average Monthly Refuse Tons per 1000 Residents by Borough (2024)' },
@@ -113,7 +113,7 @@ export default function TrashAnalysis() {
         
         <header className="max-w-4xl mx-auto mb-10">
           <h1 className="text-4xl font-extrabold text-eco-green-dark mb-3">
-            🚮 DSNY Trash Data Analysis
+            🚮 DSNY Trash Data Analysis Report
           </h1>
           <p className="text-lg text-eco-text-dark/80">
             [Not polished] This page will visualize DSNY pickup data, tonnage, and borough-level comparisons.
