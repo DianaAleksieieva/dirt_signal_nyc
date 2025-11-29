@@ -16,7 +16,7 @@ const ImageGallery = ({ images, title }) => (
             src={image.src}
             alt={image.alt}
             className="w-full h-full object-contain"
-            contentFetchId={image.id}
+            contentfetchid={image.id}
           />
         </div>
       ))}
@@ -113,7 +113,7 @@ export default function TrashAnalysis() {
         
         <header className="max-w-4xl mx-auto mb-10">
           <h1 className="text-4xl font-extrabold text-eco-green-dark mb-3">
-            🚮 DSNY Trash Data Analysis Report
+            🚮 DSNY Monthly Trash Data Report
           </h1>
           <p className="text-lg text-eco-text-dark/80">
             [Not polished] This page will visualize DSNY pickup data, tonnage, and borough-level comparisons.

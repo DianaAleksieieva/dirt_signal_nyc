@@ -29,7 +29,7 @@ export default function Analysis() {
 
         <Link href="/analysis/TrashAnalysis">
           <div className="cursor-pointer bg-eco-green-soft p-6 rounded-xl shadow-sm hover:bg-eco-green-dark hover:text-white transition">
-            <h2 className="text-lg font-semibold mb-2">🚮 DSNY Trash Data</h2>
+            <h2 className="text-lg font-semibold mb-2">🚮 DSNY Monthly Trash Data</h2>
             <p className="text-sm opacity-80">
               Tonnage, pickup density, and waste categories.
             </p>

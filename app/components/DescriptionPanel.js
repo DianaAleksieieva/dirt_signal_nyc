@@ -88,6 +88,39 @@ export default function DescriptionPanel({
         NYC Cleanliness
       </h2>
 
+      {layer !== "311" && (
+        <>
+          <div>
+            <p className="text-eco-green-dark font-semibold text-lg">
+              📍 2024 Total Waste (Tons)
+            </p>
+            <p className="text-2xl font-bold text-eco-green-dark">
+              248,477
+            </p>
+          </div>
+
+          <div>
+            <p className="font-semibold text-eco-green-dark ">
+              Highest Waste Community District
+            </p>
+
+          <div className="mt-1 text-sm text-eco-green-dark/90">
+            <p>
+              <strong>Borough:</strong> Queens
+            </p>
+            <p>
+              <strong>Community District:</strong>  7
+            </p>
+
+            <p className="text-sm text-eco-green-dark/90">
+              <strong>Tons:</strong> 8,859
+            </p>
+          </div>
+
+          </div>
+        </>
+      )}
+
       {layer === "311" && (
         <>
           {/* TOTAL FOR SELECTED TYPE */}
