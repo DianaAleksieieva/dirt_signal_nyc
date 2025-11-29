@@ -110,12 +110,26 @@ export default function MapTrashLayer({ data }) {
     return COLORS[Array.from(String(key)).reduce((a, c) => a + c.charCodeAt(0), 0) % COLORS.length];
   };
 
+const hasMatchingDistrict = (feature) => {
+    const props = feature?.properties;
+    if (!props) return false;
+    
+    const keys = [props.CDTA2020, props.GEOID, props.NAMELSAD, props.name].filter(Boolean);
+    for (const k of keys) {
+      if (tonnageMap.has(k) || tonnageMap.has(String(k).toLowerCase()) || tonnageMap.has(String(k).replace(/\D/g, ''))) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   if (!data || !GeoJSON) return null;
 
   return (
     <GeoJSON
       key={tonnageMap.size} 
       data={data}
+      filter={hasMatchingDistrict}
       style={(f) => ({ color: "#555", weight: 0.4, fillColor: getColor(f), fillOpacity: 0.55 })}
       onEachFeature={(f, layer) => {
         const district = formatDistrict(f.properties?.CDTA2020 || f.properties?.NAMELSAD || f.properties?.name || "District");
