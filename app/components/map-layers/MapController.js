@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 const Map311Layer = dynamic(() => import("./Map311Layer"), { ssr: false });
 const MapTrashLayer = dynamic(() => import("./MapTrashLayer"), { ssr: false });
 const MapBinsLayer = dynamic(() => import("./MapBinsLayer"), { ssr: false });
+const MapAnalysisLayer = dynamic(() => import("./MapAnalysisLayer"), { ssr: false });
 const MapClient = dynamic(() => import("./MapClient"), { ssr: false });
 const Legend = dynamic(() => import("./Legend"), { ssr: false });
 
@@ -20,6 +21,8 @@ export default function MapController({
 }) {
   const [geojson, setGeojson] = useState(null);
   const [complaintData, setComplaintData] = useState(null);
+  const [dominantData, setDominantData] = useState(null); 
+  const [populationData, setPopulationData] = useState(null); 
   const [scale, setScale] = useState(null);
 
   const handleScaleCreated = (newScale) => {
@@ -38,6 +41,17 @@ export default function MapController({
       } catch (e) {
         console.error("❌ Error loading complaint data:", e);
         setComplaintData(null);
+      }
+
+      try {
+        const [resComp, resPop] = await Promise.all([
+          fetch("/data/analysis/optimized_nta_complaints.json"),
+          fetch("/data/analysis/nta_population.json")
+        ]);
+        setDominantData(await resComp.json());
+        setPopulationData(await resPop.json());
+      } catch (e) {
+        console.error("❌ Error loading dominant layer data:", e);
       }
 
       let url = "/data/311/NYC_census_tract.geojson";
@@ -75,6 +89,19 @@ export default function MapController({
           endMonth={endMonth}
         />
       )}
+
+      {layer === 'analysis' && (
+        <MapAnalysisLayer
+          data={geojson} 
+          complaints={dominantData}
+          population={populationData}
+          startYear={startYear}
+          startMonth={startMonth}
+          endYear={endYear}
+          endMonth={endMonth}
+        />
+      )}
+
       {layer === "trash" && <MapTrashLayer data={geojson} />}
       {showBins && <MapBinsLayer data={geojson} />} {/* overlay */}
       <Legend scale={scale} />

@@ -134,10 +134,26 @@ export default function MapPage() {
                 Trash data
               </button>
             </div>
+
+            {/* GROUP 3: Analysis DATA */}
+            <div className="flex gap-2 bg-eco-green-soft/40 px-3 py-2 rounded-lg shadow-sm">
+              {/* Analysis BUTTON */}
+              <button
+                onClick={() => setLayer("analysis")}
+                className={`px-2.5 py-1.5 rounded text-sm shadow-sm transition
+        ${
+          layer === "analysis"
+            ? "bg-eco-green-dark text-white"
+            : "bg-white text-eco-green-dark hover:bg-eco-green-dark hover:text-white"
+        }`}
+              >
+                Analysis
+              </button>
+            </div>
           </div>
 
           {/* SECOND-LEVEL FILTERS FOR 311 */}
-          {layer === "311" && (
+          {["311", "analysis"].includes(layer) && (
             <div className="mb-4 flex flex-wrap items-center gap-6">
               {/* TIME PERIOD FILTER */}
               <div className="flex items-center gap-4 bg-eco-green-soft p-2 rounded-lg">
