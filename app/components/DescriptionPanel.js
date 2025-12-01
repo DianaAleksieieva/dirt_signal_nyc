@@ -88,7 +88,7 @@ export default function DescriptionPanel({
         NYC Cleanliness
       </h2> */}
 
-      {/* {(layer !== "311") && (
+      {(layer !== "311") && (
         <>
           <div>
             <p className="text-eco-green-dark font-semibold text-lg">
@@ -119,7 +119,7 @@ export default function DescriptionPanel({
 
           </div>
         </>
-      )} */}
+      )}
 
       {layer === "311" && (
         <>
