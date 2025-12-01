@@ -67,10 +67,13 @@ export default function MapAnalysisLayer({
         }
       }
 
-      const pop = population[ntaCode] || population[ntaCode.substring(0,4)] || 1;
+      const cdid = ntaCode.substring(0,4);
+
+      const pop = population[ntaCode.substring(0,4)];
+      
       const intensity = (totalComplaints / pop) * 1000;
 
-      stats.set(ntaCode, { dominantType, intensity });
+      stats.set(ntaCode, { dominantType, intensity, pop, cdid, maxCount});
     }
 
     return stats;
@@ -91,7 +94,10 @@ export default function MapAnalysisLayer({
         layer.bindPopup(
           `<b>${name}</b><br/>
            Dominant: ${stat.dominantType}<br/>
-           Intensity: ${stat.intensity.toFixed(2)} / 1k pop`
+           Intensity: ${stat.intensity.toFixed(2)} / 1k pop
+           pop: ${stat.pop}
+           cdid: ${stat.cdid}
+           maxCount: ${stat.maxCount}`
         );
       } else {
         layer.bindPopup(`${name}<br/>No Data`);
