@@ -14,12 +14,12 @@ const SeasonalityChart = ({ data }) => (
       <ComposedChart data={data}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="Month_Num" label={{ value: "Month", position: "insideBottom", offset: -5 }} />
-        <YAxis yAxisId="left" label={{ value: "Complaints", angle: -90, position: "insideLeft" }} />
-        <YAxis yAxisId="right" orientation="right" label={{ value: "Refuse Tons", angle: 90, position: "insideRight" }} />
+        <YAxis yAxisId="left" domain={[50, 85]} label={{ value: "Complaints", angle: -90, position: "insideLeft" }} />
+        <YAxis yAxisId="right" domain={[3500, 5000]} orientation="right" label={{ value: "Refuse Tons", angle: 90, position: "insideRight" }} />
         <Tooltip />
         <Legend />
-        <Line yAxisId="left" type="monotone" dataKey="Complaints" stroke="#e74c3c" strokeWidth={2} dot={{ r: 4 }} name="Avg Complaints" />
-        <Line yAxisId="right" type="monotone" dataKey="Refuse_Tons" stroke="#3498db" strokeWidth={2} dot={{ r: 4 }} shape="square" name="Refuse (Tons)" />
+        <Line yAxisId="left" type="linear" dataKey="Complaints" stroke="#e74c3c" strokeWidth={2} dot={{ r: 4 }} name="Avg Complaints" />
+        <Line yAxisId="right" type="linear" dataKey="Refuse_Tons" stroke="#3498db" strokeWidth={2} dot={{ r: 4 }} shape="square" name="Refuse (Tons)" />
       </ComposedChart>
     </ResponsiveContainer>
   </div>
