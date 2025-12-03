@@ -4,12 +4,14 @@ import { useEffect, useMemo, useRef } from "react";
 import { GeoJSON } from "react-leaflet";
 
 const COLOR_MAPPING = {
-  "Infrastructure Deficit": "#e41a1c",
-  "Missed Collection": "#377eb8",
-  "Sweeping Missed": "#4daf4a",
-  "Service Failure": "#ffff00",
-  "Condition/Volume": "#984ea3",
-  "Other": "#999999",
+    'Collection: Missed Service': '#377eb8',
+    'Collection: Bulky & Special Requests': '#ff7f00',
+    'Collection: Other/Admin': '#999999',
+    
+    'Baskets: Overflow & Maintenance': '#984ea3',
+    'Baskets: New Requests & Placement': '#e41a1c',
+    
+    'Street Cleaning': '#4daf4a',
 };
 
 export default function MapAnalysisLayer({

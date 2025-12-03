@@ -209,8 +209,8 @@ export default function DescriptionPanel({
                     <strong>💾 Data Source:</strong> <a href="https://data.cityofnewyork.us/Social-Services/311-trash-reports/h2g7-xbpj/about_data" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">NYC Open Data - 311 Service Requests</a>
                 </p>
             </div>
-            
-            {/* 1. Category Legend (Updated with all colors) */}
+
+            {/* 1. Category Legend (Updated for Refined Categories) */}
             <div>
               <h3 className="font-semibold text-gray-700 mb-2 flex items-center gap-2">
                 🎨 Category Legend
@@ -219,59 +219,71 @@ export default function DescriptionPanel({
                 Each color represents the <b>most frequent</b> complaint type in that area:
               </p>
               
-              <div className="space-y-3 bg-white p-3 rounded-lg border border-gray-200 shadow-sm max-h-[40vh] overflow-y-auto">
-                
-                {/* Red: Infrastructure */}
+              <div className="space-y-3 bg-white p-3 rounded-lg border border-gray-200 shadow-sm max-h-[50vh] overflow-y-auto">
+
+                {/* Blue: Collection: Missed Service */}
                 <div className="flex items-start gap-3">
-                  <span className="w-4 h-4 rounded-full bg-[#e41a1c] mt-1 shrink-0"></span>
+                  <span className="w-4 h-4 rounded-full bg-[#377eb8] mt-1 shrink-0 shadow-sm"></span>
                   <div>
-                    <p className="text-sm font-bold text-gray-800">Infrastructure Deficit</p>
-                    <p className="text-xs text-gray-500">Requests for new litter baskets or reporting damaged bins.</p>
+                    <p className="text-sm font-bold text-gray-800">Collection: Missed Service</p>
+                    <p className="text-xs text-gray-500">
+                      Sanitation truck did not pick up trash/recycling on schedule
+                    </p>
                   </div>
                 </div>
 
-                {/* Blue: Missed Collection */}
+                {/* Orange: Collection: Bulky & Special Requests */}
                 <div className="flex items-start gap-3">
-                  <span className="w-4 h-4 rounded-full bg-[#377eb8] mt-1 shrink-0"></span>
+                  <span className="w-4 h-4 rounded-full bg-[#ff7f00] mt-1 shrink-0 shadow-sm"></span>
                   <div>
-                    <p className="text-sm font-bold text-gray-800">Missed Collection</p>
-                    <p className="text-xs text-gray-500">Sanitation truck did not pick up trash/recycling on schedule.</p>
+                    <p className="text-sm font-bold text-gray-800">Collection: Bulky & Special Requests</p>
+                    <p className="text-xs text-gray-500">
+                      Scheduled pickups for large items (furniture, appliances) or seasonal items (Xmas trees).
+                    </p>
                   </div>
                 </div>
 
-                {/* Green: Sweeping Missed */}
+                {/* Red: Baskets: New Requests & Placement */}
                 <div className="flex items-start gap-3">
-                  <span className="w-4 h-4 rounded-full bg-[#4daf4a] mt-1 shrink-0"></span>
+                  <span className="w-4 h-4 rounded-full bg-[#e41a1c] mt-1 shrink-0 shadow-sm"></span>
                   <div>
-                    <p className="text-sm font-bold text-gray-800">Sweeping Missed</p>
-                    <p className="text-xs text-gray-500">Mechanical street cleaning failed to service the street.</p>
+                    <p className="text-sm font-bold text-gray-800">Baskets: New Requests & Placement</p>
+                    <p className="text-xs text-gray-500">
+                      Requests for new litter baskets, "Adopt-A-Basket", or bin relocation. <br/>
+                    </p>
                   </div>
                 </div>
 
-                {/* Purple: Condition/Volume */}
+                {/* Purple: Baskets: Overflow & Maintenance */}
                 <div className="flex items-start gap-3">
-                  <span className="w-4 h-4 rounded-full bg-[#984ea3] mt-1 shrink-0"></span>
+                  <span className="w-4 h-4 rounded-full bg-[#984ea3] mt-1 shrink-0 shadow-sm"></span>
                   <div>
-                    <p className="text-sm font-bold text-gray-800">Condition / Volume</p>
-                    <p className="text-xs text-gray-500">Overflowing baskets, dirty sidewalks, spilling trash.</p>
+                    <p className="text-sm font-bold text-gray-800">Baskets: Overflow & Maintenance</p>
+                    <p className="text-xs text-gray-500">
+                      Overflowing baskets or damaged/dirty bins.
+                    </p>
                   </div>
                 </div>
 
-                {/* Yellow: Service Failure (Added border for visibility) */}
+                {/* Green: Street Cleaning */}
                 <div className="flex items-start gap-3">
-                  <span className="w-4 h-4 rounded-full bg-[#ffff00] mt-1 shrink-0 border border-gray-300"></span>
+                  <span className="w-4 h-4 rounded-full bg-[#4daf4a] mt-1 shrink-0 shadow-sm"></span>
                   <div>
-                    <p className="text-sm font-bold text-gray-800">Service Failure</p>
-                    <p className="text-xs text-gray-500">Collection truck noise, reckless driving, or bulky item issues.</p>
+                    <p className="text-sm font-bold text-gray-800">Street Cleaning</p>
+                    <p className="text-xs text-gray-500">
+                      Missed or inadequate mechanical street sweeping services.
+                    </p>
                   </div>
                 </div>
 
-                {/* Grey: Other */}
+                {/* Grey: Collection: Other/Admin */}
                 <div className="flex items-start gap-3">
-                  <span className="w-4 h-4 rounded-full bg-[#999999] mt-1 shrink-0"></span>
+                  <span className="w-4 h-4 rounded-full bg-[#999999] mt-1 shrink-0 shadow-sm"></span>
                   <div>
-                    <p className="text-sm font-bold text-gray-800">Other</p>
-                    <p className="text-xs text-gray-500">Miscellaneous complaints not fitting major categories.</p>
+                    <p className="text-sm font-bold text-gray-800">Collection: Other/Admin</p>
+                    <p className="text-xs text-gray-500">
+                      Truck noise, schedule changes & misc.
+                    </p>
                   </div>
                 </div>
 
