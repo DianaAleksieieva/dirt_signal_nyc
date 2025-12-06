@@ -192,7 +192,7 @@ export default function DescriptionPanel({
         </>
       )}
 
-      {(layer === "analysis") && (
+      {(layer === "issues") && (
         <>
           <h2 className="text-xl font-bold text-gray-800 border-b pb-2 mb-4">
             Analysis Map Guide

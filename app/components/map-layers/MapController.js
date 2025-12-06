@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 const Map311Layer = dynamic(() => import("./Map311Layer"), { ssr: false });
 const MapTrashLayer = dynamic(() => import("./MapTrashLayer"), { ssr: false });
 const MapBinsLayer = dynamic(() => import("./MapBinsLayer"), { ssr: false });
-const MapAnalysisLayer = dynamic(() => import("./MapAnalysisLayer"), { ssr: false });
+const MajorIssuesLayer = dynamic(() => import("./MapMajorIssuesLayer"), { ssr: false });
 const MapClient = dynamic(() => import("./MapClient"), { ssr: false });
 const Legend = dynamic(() => import("./Legend"), { ssr: false });
 
@@ -90,8 +90,8 @@ export default function MapController({
         />
       )}
 
-      {layer === 'analysis' && (
-        <MapAnalysisLayer
+      {layer === 'issues' && (
+        <MajorIssuesLayer
           data={geojson} 
           complaints={dominantData}
           population={populationData}

@@ -38,9 +38,9 @@ export default function Analysis() {
 
         <Link href="/analysis/ModelingAnalysis">
           <div className="cursor-pointer bg-eco-green-soft p-6 rounded-xl shadow-sm hover:bg-eco-green-dark hover:text-white transition">
-            <h2 className="text-lg font-semibold mb-2">📈 Modeling & Forecasting</h2>
+            <h2 className="text-lg font-semibold mb-2">📈 Major Cleanliness Issues</h2>
             <p className="text-sm opacity-80">
-              Predictive models, regressions, and ML experiments.
+              Trends and dominant cleanliness problems.
             </p>
           </div>
         </Link>

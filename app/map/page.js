@@ -84,28 +84,53 @@ export default function MapPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-eco-beige text-eco-text pt-0 px-6 pb-6">
+    <div className=" mt-3 h-[calc(100vh-6rem)] overflow-hidden bg-eco-beige text-eco-text px-6 pb-6 pt-0">
       <div className="h-full flex flex-col lg:flex-row gap-6">
         {/* MAP SECTION */}
         <div className="lg:w-4/5 w-full flex flex-col h-[70vh] lg:h-[80vh]">
           {/* MAIN BUTTON BAR */}
-          <div className="mb-4 flex flex-wrap gap-4">
-            {/* GROUP 1: 311 + BINS */}
+          <div className=" mb-4 flex items-center flex-wrap gap-4">
+            {/* GROUP 1: TRASH DATA */}
             <div className="flex gap-2 bg-eco-green-soft/40 px-3 py-2 rounded-lg shadow-sm">
-              {/* 311 BUTTON */}
+              <button
+                onClick={() => setLayer("trash")}
+                className={`px-2.5 py-1.5 rounded text-sm shadow-sm transition
+      ${
+        layer === "trash"
+          ? "bg-eco-green-dark text-white"
+          : "bg-white text-eco-green-dark hover:bg-eco-green-dark hover:text-white"
+      }`}
+              >
+                Trash data
+              </button>
+            </div>
+
+            {/* GROUP 2: 311 + BINS + Major Issues */}
+            <div className="flex gap-2 bg-eco-green-soft/40 px-3 py-2 rounded-lg shadow-sm">
               <button
                 onClick={() => setLayer("311")}
                 className={`px-2.5 py-1.5 rounded text-sm shadow-sm transition
-        ${
-          layer === "311"
-            ? "bg-eco-green-dark text-white"
-            : "bg-white text-eco-green-dark hover:bg-eco-green-dark hover:text-white"
-        }`}
+      ${
+        layer === "311"
+          ? "bg-eco-green-dark text-white"
+          : "bg-white text-eco-green-dark hover:bg-eco-green-dark hover:text-white"
+      }`}
               >
                 311 Complaints
               </button>
 
-              {/* BINS BUTTON */}
+              <button
+                onClick={() => setLayer("issues")}
+                className={`px-2.5 py-1.5 rounded text-sm shadow-sm transition
+        ${
+          layer === "issues"
+            ? "bg-eco-green-dark text-white"
+            : "bg-white text-eco-green-dark hover:bg-eco-green-dark hover:text-white"
+        }`}
+              >
+                Major Issues
+              </button>
+
               <button
                 onClick={() => setShowBins(!showBins)}
                 className={`px-2.5 py-1.5 rounded text-sm shadow-sm transition
@@ -116,38 +141,6 @@ export default function MapPage() {
         }`}
               >
                 🗑️ DSNY Bins
-              </button>
-            </div>
-
-            {/* GROUP 2: TRASH DATA */}
-            <div className="flex gap-2 bg-eco-green-soft/40 px-3 py-2 rounded-lg shadow-sm">
-              {/* TRASH BUTTON */}
-              <button
-                onClick={() => setLayer("trash")}
-                className={`px-2.5 py-1.5 rounded text-sm shadow-sm transition
-        ${
-          layer === "trash"
-            ? "bg-eco-green-dark text-white"
-            : "bg-white text-eco-green-dark hover:bg-eco-green-dark hover:text-white"
-        }`}
-              >
-                Trash data
-              </button>
-            </div>
-
-            {/* GROUP 3: Analysis DATA */}
-            <div className="flex gap-2 bg-eco-green-soft/40 px-3 py-2 rounded-lg shadow-sm">
-              {/* Analysis BUTTON */}
-              <button
-                onClick={() => setLayer("analysis")}
-                className={`px-2.5 py-1.5 rounded text-sm shadow-sm transition
-        ${
-          layer === "analysis"
-            ? "bg-eco-green-dark text-white"
-            : "bg-white text-eco-green-dark hover:bg-eco-green-dark hover:text-white"
-        }`}
-              >
-                Analysis
               </button>
             </div>
           </div>

@@ -16,12 +16,19 @@ import {
 } from "recharts";
 
 export default function Analysis311() {
-
-  const [useBulky, setUseBulky] = useState(true);
+  const [useBulky, setUseBulky] = useState(false);
   const [complaints, setComplaints] = useState(null);
   const [tracts, setTracts] = useState(null);
-  const [boroughBarMode, setBoroughBarMode] = useState("total"); 
-
+  const [boroughBarMode, setBoroughBarMode] = useState("total");
+  const [visibleTypes, setVisibleTypes] = useState({
+    Collection: true,
+    Sweeping: true,
+    Basket: true,
+  });
+  const [yearlyMode, setYearlyMode] = useState("total");
+  const toggleType = (type) => {
+    setVisibleTypes((prev) => ({ ...prev, [type]: !prev[type] }));
+  };
   /* LOAD DATA */
 
   useEffect(() => {
@@ -88,18 +95,30 @@ export default function Analysis311() {
 
     const yearMap = {};
 
+    // initialize map
     for (const type of TYPES) {
       for (const [month, geoData] of Object.entries(complaints[type] || {})) {
         const year = month.split("-")[0];
-        const total = Object.values(geoData).reduce((a, b) => a + b, 0);
+        if (!yearMap[year]) {
+          yearMap[year] = {
+            year,
+            total: 0,
+            Collection: 0,
+            Sweeping: 0,
+            Basket: 0,
+          };
+        }
 
-        yearMap[year] = (yearMap[year] || 0) + total;
+        const sum = Object.values(geoData).reduce((a, b) => a + b, 0);
+
+        yearMap[year][type] += sum;
+        yearMap[year].total += sum;
       }
     }
 
-    return Object.entries(yearMap)
-      .sort((a, b) => Number(a[0]) - Number(b[0]))
-      .map(([year, total]) => ({ year, total }));
+    return Object.values(yearMap).sort(
+      (a, b) => Number(a.year) - Number(b.year)
+    );
   }, [complaints]);
 
   /** Borough Lookup **/
@@ -185,7 +204,6 @@ export default function Analysis311() {
     "Staten Island": "#2e86de",
   };
 
-
   if (!complaints || !tracts) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -198,18 +216,21 @@ export default function Analysis311() {
 
   return (
     <div className="min-h-screen bg-eco-beige text-eco-text pt-3 px-6 pb-10">
-
       <h1 className="text-3xl font-bold text-eco-green-dark mb-4">
         🗑️ 311 Complaint Analysis
       </h1>
 
       {/* Bulky Toggle */}
       <div className="flex items-center gap-3 mb-6">
-        <span className="text-sm text-eco-text-dark/70">Include bulky items?</span>
+        <span className="text-sm text-eco-text-dark/70">
+          Include bulky items?
+        </span>
         <button
           onClick={() => setUseBulky((p) => !p)}
           className={`px-3 py-1 rounded text-sm shadow-sm transition ${
-            useBulky ? "bg-eco-green-dark text-white" : "bg-gray-300 text-gray-700"
+            useBulky
+              ? "bg-eco-green-dark text-white"
+              : "bg-gray-300 text-gray-700"
           }`}
         >
           {useBulky ? "YES" : "NO"}
@@ -217,12 +238,33 @@ export default function Analysis311() {
       </div>
 
       {/* ⭐ 1 — Monthly Trend */}
-      <div className="bg-white/70 rounded-xl shadow-sm p-6 h-[300px] mb-10">
-        <h2 className="text-lg font-semibold text-eco-green-dark mb-3">
-          Monthly Complaint Trend by Type
-        </h2>
+      <div className="bg-white/70 rounded-xl shadow-sm p-6 h-[330px] mb-10">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-lg font-semibold text-eco-green-dark">
+            Monthly Complaint Trend by Type
+          </h2>
 
-        <ResponsiveContainer width="100%" height="85%">
+          {/* Toggle buttons */}
+          <div className="flex gap-2 text-xs">
+            {["Collection", "Sweeping", "Basket"].map((t, i) => (
+              <button
+                key={t}
+                onClick={() => toggleType(t)}
+                className={`px-2 py-1 rounded shadow-sm transition border
+            ${
+              visibleTypes[t]
+                ? "bg-eco-green-dark text-white border-eco-green-dark"
+                : "bg-white text-eco-text-dark border-gray-300"
+            }
+          `}
+              >
+                {t}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <ResponsiveContainer width="100%" height="80%">
           <LineChart data={monthlyTrend}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="month" />
@@ -230,9 +272,32 @@ export default function Analysis311() {
             <Tooltip />
             <Legend />
 
-            <Line type="monotone" dataKey="Collection" stroke="#198657" strokeWidth={2} />
-            <Line type="monotone" dataKey="Sweeping" stroke="#76d917" strokeWidth={2} />
-            <Line type="monotone" dataKey="Basket" stroke="#ff8a00" strokeWidth={2} />
+            {visibleTypes.Collection && (
+              <Line
+                type="monotone"
+                dataKey="Collection"
+                stroke="#198657"
+                strokeWidth={2}
+              />
+            )}
+
+            {visibleTypes.Sweeping && (
+              <Line
+                type="monotone"
+                dataKey="Sweeping"
+                stroke="#76d917"
+                strokeWidth={2}
+              />
+            )}
+
+            {visibleTypes.Basket && (
+              <Line
+                type="monotone"
+                dataKey="Basket"
+                stroke="#ff8a00"
+                strokeWidth={2}
+              />
+            )}
           </LineChart>
         </ResponsiveContainer>
       </div>
@@ -257,12 +322,43 @@ export default function Analysis311() {
           </BarChart>
         </ResponsiveContainer>
       </div>
-
       {/* ⭐ 3 — Yearly Trend */}
-      <div className="bg-white/70 rounded-xl shadow-sm p-6 h-[300px] mb-10">
-        <h2 className="text-lg font-semibold text-eco-green-dark mb-3">
-          Total Complaints Over Years
-        </h2>
+      {/* ⭐ 3 — Yearly Trend */}
+      <div className="bg-white/70 rounded-xl shadow-sm p-6 h-[330px] mb-10">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-lg font-semibold text-eco-green-dark">
+            Complaints Over Years
+          </h2>
+
+          {/* Toggle Mode */}
+          <div className="flex items-center gap-2 text-xs">
+            <button
+              onClick={() => setYearlyMode("total")}
+              className={`px-2 py-1 rounded border transition
+          ${
+            yearlyMode === "total"
+              ? "bg-eco-green-dark text-white border-eco-green-dark"
+              : "bg-white text-eco-text-dark border-gray-300"
+          }
+        `}
+            >
+              Total
+            </button>
+
+            <button
+              onClick={() => setYearlyMode("byType")}
+              className={`px-2 py-1 rounded border transition
+          ${
+            yearlyMode === "byType"
+              ? "bg-eco-green-dark text-white border-eco-green-dark"
+              : "bg-white text-eco-text-dark border-gray-300"
+          }
+        `}
+            >
+              By Type
+            </button>
+          </div>
+        </div>
 
         <ResponsiveContainer width="100%" height="85%">
           <LineChart data={yearlyTotals}>
@@ -272,88 +368,94 @@ export default function Analysis311() {
             <Tooltip />
             <Legend />
 
-            <Line
-              type="monotone"
-              dataKey="total"
-              stroke="#198657"
-              strokeWidth={3}
-              dot={{ r: 5 }}
-            />
+            {yearlyMode === "total" && (
+              <Line
+                type="monotone"
+                dataKey="total"
+                stroke="#198657"
+                strokeWidth={3}
+                dot={{ r: 5 }}
+                name="Total Complaints"
+              />
+            )}
+
+            {yearlyMode === "byType" && (
+              <>
+                <Line
+                  type="monotone"
+                  dataKey="Collection"
+                  stroke="#1f7a4f"
+                  strokeWidth={2}
+                  dot={{ r: 3 }}
+                  name="Collection"
+                />
+                <Line
+                  type="monotone"
+                  dataKey="Sweeping"
+                  stroke="#76d917"
+                  strokeWidth={2}
+                  dot={{ r: 3 }}
+                  name="Sweeping"
+                />
+                <Line
+                  type="monotone"
+                  dataKey="Basket"
+                  stroke="#ff8a00"
+                  strokeWidth={2}
+                  dot={{ r: 3 }}
+                  name="Basket"
+                />
+              </>
+            )}
           </LineChart>
         </ResponsiveContainer>
       </div>
 
-      {/* Complaints by Borough (Total vs Type Breakdown) */}
-      <div className="bg-white/70 rounded-xl shadow-sm p-6 h-[330px]">
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-lg font-semibold text-eco-green-dark">
-            Complaints by Borough
-          </h2>
-
-          {/* Mode Toggle */}
-          <div className="flex items-center gap-2 text-xs">
-            <button
-              onClick={() => setBoroughBarMode("total")}
-              className={`px-2 py-1 rounded border transition ${
-                boroughBarMode === "total"
-                  ? "bg-eco-green-dark text-white border-eco-green-dark"
-                  : "bg-white text-eco-text-dark border-gray-300"
-              }`}
-            >
-              Total
-            </button>
-
-            <button
-              onClick={() => setBoroughBarMode("byType")}
-              className={`px-2 py-1 rounded border transition ${
-                boroughBarMode === "byType"
-                  ? "bg-eco-green-dark text-white border-eco-green-dark"
-                  : "bg-white text-eco-text-dark border-gray-300"
-              }`}
-            >
-              By type
-            </button>
-          </div>
-        </div>
+      {/* ⭐ 4 — Complaints by Borough (Total) */}
+      <div className="bg-white/70 rounded-xl shadow-sm p-6 h-[330px] mb-10">
+        <h2 className="text-lg font-semibold text-eco-green-dark mb-3">
+          Complaints by Borough — Total
+        </h2>
 
         <ResponsiveContainer width="100%" height="80%">
-          <BarChart
-            data={boroughBarMode === "total" ? complaintsByBorough : boroughByType}
-          >
+          <BarChart data={complaintsByBorough}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="borough" />
             <YAxis />
             <Tooltip />
             <Legend />
 
-            {boroughBarMode === "total" ? (
-              <Bar dataKey="total" name="Total complaints">
-                {complaintsByBorough.map((entry) => (
-                  <Cell
-                    key={entry.borough}
-                    fill={BOROUGH_COLORS[entry.borough] || "#999"}
-                  />
-                ))}
-              </Bar>
-            ) : (
-              <>
-                <Bar
-                  dataKey="Collection"
-                  name="Collection"
-                  fill={COLORS[TYPES.indexOf("Collection")]}
+            <Bar dataKey="total" name="Total complaints">
+              {complaintsByBorough.map((entry) => (
+                <Cell
+                  key={entry.borough}
+                  fill={BOROUGH_COLORS[entry.borough] || "#999"}
                 />
-                <Bar
-                  dataKey="Sweeping"
-                  name="Sweeping"
-                  fill={COLORS[TYPES.indexOf("Sweeping")]}
-                />
-                <Bar
-                  dataKey="Basket"
-                  name="Basket"
-                  fill={COLORS[TYPES.indexOf("Basket")]}
-                />
-              </>
-            )}
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+      {/* ⭐ 5 — Complaints by Borough (By Type Breakdown) */}
+      <div className="bg-white/70 rounded-xl shadow-sm p-6 h-[330px] mb-10">
+        <h2 className="text-lg font-semibold text-eco-green-dark mb-3">
+          Complaints by Borough — By Type
+        </h2>
+
+        <ResponsiveContainer width="100%" height="80%">
+          <BarChart data={boroughByType}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="borough" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+
+            <Bar
+              dataKey="Collection"
+              fill={COLORS[TYPES.indexOf("Collection")]}
+            />
+            <Bar dataKey="Sweeping" fill={COLORS[TYPES.indexOf("Sweeping")]} />
+            <Bar dataKey="Basket" fill={COLORS[TYPES.indexOf("Basket")]} />
           </BarChart>
         </ResponsiveContainer>
       </div>

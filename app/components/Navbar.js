@@ -33,11 +33,11 @@ export default function Navbar() {
       <Link href="/" style={linkStyle("/")}>
         Home
       </Link>
-      <Link href="/map" style={linkStyle("/map")}>
-        Map
-      </Link>
       <Link href="/analysis" style={linkStyle("/Analysis")}>
         Analysis
+      </Link>
+      <Link href="/map" style={linkStyle("/map")}>
+        Map
       </Link>
       <Link href="/team" style={linkStyle("/team")}>
         Team

@@ -60,21 +60,19 @@ export default function Home() {
         {/* BUTTONS */}
         <div className="flex flex-col sm:flex-row gap-4 mt-8">
           <Link
-            href="/map"
-            className="px-6 py-3 rounded-lg bg-eco-green-dark text-white font-medium shadow-md
-               hover:bg-eco-green-soft hover:text-eco-green-dark transition text-center"
-          >
-            🗺️ Explore the Map
-          </Link>
-
-          <Link
             href="/analysis"
             className="px-6 py-3 rounded-lg bg-eco-green-dark text-white font-medium shadow-md
                hover:bg-eco-green-soft hover:text-eco-green-dark transition text-center"
           >
             📊 View Analysis
           </Link>
-
+          <Link
+            href="/map"
+            className="px-6 py-3 rounded-lg bg-eco-green-dark text-white font-medium shadow-md
+               hover:bg-eco-green-soft hover:text-eco-green-dark transition text-center"
+          >
+            🗺️ Explore the Map
+          </Link>
           <Link
             href="/team"
             className="px-6 py-3 rounded-lg bg-eco-green-dark text-white font-medium shadow-md

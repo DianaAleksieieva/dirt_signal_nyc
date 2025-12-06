@@ -14,7 +14,7 @@ const COLOR_MAPPING = {
     'Street Cleaning': '#4daf4a',
 };
 
-export default function MapAnalysisLayer({
+export default function MajorIssuesLayer({
   data, 
   complaints, 
   population, 
