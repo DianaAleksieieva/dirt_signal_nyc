@@ -26,11 +26,13 @@ export default function Analysis311() {
     Basket: true,
   });
   const [yearlyMode, setYearlyMode] = useState("total");
+  const [boroStartYear, setBoroStartYear] = useState("All");
+
   const toggleType = (type) => {
     setVisibleTypes((prev) => ({ ...prev, [type]: !prev[type] }));
   };
-  /* LOAD DATA */
 
+  /* LOAD DATA */
   useEffect(() => {
     async function load() {
       try {
@@ -56,6 +58,18 @@ export default function Analysis311() {
 
   const TYPES = ["Collection", "Sweeping", "Basket"];
   const COLORS = ["#198657", "#76d917", "#ff8a00"];
+
+  /* Available years for the dropdown */
+  const availableYears = useMemo(() => {
+    if (!complaints) return [];
+    const years = new Set();
+    TYPES.forEach((type) => {
+      Object.keys(complaints[type] || {}).forEach((date) => {
+        years.add(date.split("-")[0]);
+      });
+    });
+    return Array.from(years).sort();
+  }, [complaints]);
 
   /** Monthly Trend **/
   const monthlyTrend = useMemo(() => {
@@ -134,14 +148,23 @@ export default function Analysis311() {
     return map;
   }, [tracts]);
 
-  /** Complaints by Borough (TOTAL) **/
+  /** ⭐ UPDATED: Complaints by Borough (AVERAGE) **/
   const complaintsByBorough = useMemo(() => {
     if (!complaints) return [];
 
     const totals = {};
+    const uniqueMonths = new Set();
 
     for (const type of TYPES) {
-      for (const [, geoData] of Object.entries(complaints[type] || {})) {
+      for (const [month, geoData] of Object.entries(complaints[type] || {})) {
+        // Filter Logic
+        const year = parseInt(month.split("-")[0]);
+        if (boroStartYear !== "All" && year < Number(boroStartYear)) {
+          continue;
+        }
+
+        uniqueMonths.add(month);
+
         for (const [geoid, count] of Object.entries(geoData)) {
           const borough = boroughLookup[geoid];
           if (!borough) continue;
@@ -151,10 +174,15 @@ export default function Analysis311() {
       }
     }
 
+    const distinctMonthCount = uniqueMonths.size || 1;
+
     return Object.entries(totals)
-      .map(([borough, total]) => ({ borough, total }))
-      .sort((a, b) => b.total - a.total);
-  }, [complaints, boroughLookup]);
+      .map(([borough, total]) => ({
+        borough,
+        average: Math.round(total / distinctMonthCount), // Calculate Average
+      }))
+      .sort((a, b) => b.average - a.average);
+  }, [complaints, boroughLookup, boroStartYear]);
 
   /** Complaints by Borough (BY TYPE) **/
   const boroughByType = useMemo(() => {
@@ -212,7 +240,7 @@ export default function Analysis311() {
     );
   }
 
-  /*  UI */
+  /* UI */
 
   return (
     <div className="min-h-screen bg-eco-beige text-eco-text pt-3 px-6 pb-10">
@@ -250,7 +278,7 @@ export default function Analysis311() {
               <button
                 key={t}
                 onClick={() => toggleType(t)}
-                className={`px-2 py-1 rounded shadow-sm transition border
+                className={`px-2 py-1 rounded shadow-sm transition border 
             ${
               visibleTypes[t]
                 ? "bg-eco-green-dark text-white border-eco-green-dark"
@@ -322,7 +350,7 @@ export default function Analysis311() {
           </BarChart>
         </ResponsiveContainer>
       </div>
-      {/* ⭐ 3 — Yearly Trend */}
+
       {/* ⭐ 3 — Yearly Trend */}
       <div className="bg-white/70 rounded-xl shadow-sm p-6 h-[330px] mb-10">
         <div className="flex items-center justify-between mb-3">
@@ -334,7 +362,7 @@ export default function Analysis311() {
           <div className="flex items-center gap-2 text-xs">
             <button
               onClick={() => setYearlyMode("total")}
-              className={`px-2 py-1 rounded border transition
+              className={`px-2 py-1 rounded border transition 
           ${
             yearlyMode === "total"
               ? "bg-eco-green-dark text-white border-eco-green-dark"
@@ -347,7 +375,7 @@ export default function Analysis311() {
 
             <button
               onClick={() => setYearlyMode("byType")}
-              className={`px-2 py-1 rounded border transition
+              className={`px-2 py-1 rounded border transition 
           ${
             yearlyMode === "byType"
               ? "bg-eco-green-dark text-white border-eco-green-dark"
@@ -411,11 +439,31 @@ export default function Analysis311() {
         </ResponsiveContainer>
       </div>
 
-      {/* ⭐ 4 — Complaints by Borough (Total) */}
+      {/* ⭐ 4 — Complaints by Borough (Average) */}
       <div className="bg-white/70 rounded-xl shadow-sm p-6 h-[330px] mb-10">
-        <h2 className="text-lg font-semibold text-eco-green-dark mb-3">
-          Complaints by Borough — Total
-        </h2>
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-lg font-semibold text-eco-green-dark">
+            Complaints by Borough — Average
+          </h2>
+          {/* Filter UI */}
+          <div className="flex items-center gap-2">
+            <label className="text-xs font-medium text-gray-600">
+              Start Year:
+            </label>
+            <select
+              value={boroStartYear}
+              onChange={(e) => setBoroStartYear(e.target.value)}
+              className="text-xs border border-gray-300 rounded px-2 py-1 bg-white text-gray-700 focus:outline-none focus:border-eco-green-dark"
+            >
+              <option value="All">All Time</option>
+              {availableYears.map((y) => (
+                <option key={y} value={y}>
+                  {y}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
 
         <ResponsiveContainer width="100%" height="80%">
           <BarChart data={complaintsByBorough}>
@@ -425,7 +473,8 @@ export default function Analysis311() {
             <Tooltip />
             <Legend />
 
-            <Bar dataKey="total" name="Total complaints">
+            {/* Changed dataKey to 'average' */}
+            <Bar dataKey="average" name="Avg Monthly Complaints">
               {complaintsByBorough.map((entry) => (
                 <Cell
                   key={entry.borough}
@@ -436,6 +485,7 @@ export default function Analysis311() {
           </BarChart>
         </ResponsiveContainer>
       </div>
+
       {/* ⭐ 5 — Complaints by Borough (By Type Breakdown) */}
       <div className="bg-white/70 rounded-xl shadow-sm p-6 h-[330px] mb-10">
         <h2 className="text-lg font-semibold text-eco-green-dark mb-3">
