@@ -87,9 +87,9 @@ const ResourceScatterChart = ({ data }) => {
       <h3 className="text-lg font-bold text-gray-700 mb-1">
         Foot Traffic vs. Basket Density
       </h3>
-      <p className="text-xs text-gray-500 mb-4">
+      {/* <p className="text-xs text-gray-500 mb-4">
         (Bubble Size = Complaints Intensity)
-      </p>
+      </p> */}
       <ResponsiveContainer width="100%" height="90%">
         <ScatterChart margin={{ top: 40, right: 20, bottom: 50, left: 20 }}>
           <CartesianGrid />
@@ -113,12 +113,12 @@ const ResourceScatterChart = ({ data }) => {
               position: "insideLeft",
             }}
           />
-          <ZAxis
+          {/* <ZAxis
             type="number"
             dataKey="Complaints_Per_1k"
             range={[50, 600]}
             name="Complaints"
-          />
+          /> */}
           <Tooltip
             cursor={{ strokeDasharray: "3 3" }}
             content={({ active, payload }) => {
