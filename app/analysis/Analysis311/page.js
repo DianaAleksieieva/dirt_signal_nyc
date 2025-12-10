@@ -241,6 +241,24 @@ export default function Analysis311() {
   }
 
   /* UI */
+  const BoroughLegend = () => (
+    <div className="recharts-default-legend flex justify-center flex-wrap gap-x-4 gap-y-1 text-s">
+      {Object.entries(BOROUGH_COLORS).map(([borough, color]) => (
+        <span
+          key={borough}
+          className="recharts-legend-item inline-flex items-center gap-1.5"
+        >
+          <span
+            className="inline-block w-3 h-3"
+            style={{ backgroundColor: color }}
+          />
+          <span className="recharts-legend-item-text" style={{ color }}>
+            {borough}
+          </span>
+        </span>
+      ))}
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-eco-beige text-eco-text pt-3 px-6 pb-10">
@@ -471,7 +489,11 @@ export default function Analysis311() {
             <XAxis dataKey="borough" />
             <YAxis />
             <Tooltip />
-            <Legend />
+            <Tooltip />
+            <Legend
+              content={<BoroughLegend />}
+              wrapperStyle={{ width: "100%" }}
+            />
 
             {/* Changed dataKey to 'average' */}
             <Bar dataKey="average" name="Avg Monthly Complaints">
