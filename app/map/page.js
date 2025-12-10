@@ -146,17 +146,20 @@ export default function MapPage() {
           </div>
 
           {/* SECOND-LEVEL FILTERS FOR 311 */}
-          {["311", "analysis"].includes(layer) && (
+          {/* SECOND-LEVEL FILTERS FOR 311 */}
+          {["311", "issues"].includes(layer) && (
             <div className="mb-4 flex flex-wrap items-center gap-6">
               {/* TIME PERIOD FILTER */}
               <div className="flex items-center gap-4 bg-eco-green-soft p-2 rounded-lg">
+                {/* START */}
                 <div className="flex items-center gap-2">
                   <label className="text-sm font-medium text-eco-text-dark">
                     Start:
                   </label>
+
                   <select
                     value={startMonth}
-                    onChange={(e) => setStartMonth(parseInt(e.target.value))}
+                    onChange={(e) => setStartMonth(Number(e.target.value))}
                     className="px-2 py-1 rounded-md text-xs shadow-sm border-none bg-white"
                   >
                     {months.map((m) => (
@@ -165,9 +168,10 @@ export default function MapPage() {
                       </option>
                     ))}
                   </select>
+
                   <select
                     value={startYear}
-                    onChange={(e) => setStartYear(parseInt(e.target.value))}
+                    onChange={(e) => setStartYear(Number(e.target.value))}
                     className="px-2 py-1 rounded-md text-xs shadow-sm border-none bg-white"
                   >
                     {years.map((y) => (
@@ -178,15 +182,17 @@ export default function MapPage() {
                   </select>
                 </div>
 
-                <div className="text-gray-400">-</div>
+                <span className="text-gray-400">–</span>
 
+                {/* END */}
                 <div className="flex items-center gap-2">
                   <label className="text-sm font-medium text-eco-text-dark">
                     End:
                   </label>
+
                   <select
                     value={endMonth}
-                    onChange={(e) => setEndMonth(parseInt(e.target.value))}
+                    onChange={(e) => setEndMonth(Number(e.target.value))}
                     className="px-2 py-1 rounded-md text-xs shadow-sm border-none bg-white"
                   >
                     {months.map((m) => (
@@ -195,9 +201,10 @@ export default function MapPage() {
                       </option>
                     ))}
                   </select>
+
                   <select
                     value={endYear}
-                    onChange={(e) => setEndYear(parseInt(e.target.value))}
+                    onChange={(e) => setEndYear(Number(e.target.value))}
                     className="px-2 py-1 rounded-md text-xs shadow-sm border-none bg-white"
                   >
                     {years.map((y) => (
@@ -209,23 +216,25 @@ export default function MapPage() {
                 </div>
               </div>
 
-              {/* TYPE FILTER */}
-              <div className="flex gap-2">
-                {Object.keys(typeMappings).map((t) => (
-                  <button
-                    key={t}
-                    onClick={() => setComplaintType(t)}
-                    className={`px-3 py-1 rounded-md text-xs font-medium shadow-sm transition
-                      ${
-                        complaintType === t
-                          ? "bg-[#198657] text-white"
-                          : "bg-[#E5F4EC] text-eco-green-dark hover:bg-[#198657] hover:text-white"
-                      }`}
-                  >
-                    {typeMappings[t]}
-                  </button>
-                ))}
-              </div>
+              {/* TYPE FILTER (311 ONLY) */}
+              {layer === "311" && (
+                <div className="flex gap-2">
+                  {Object.keys(typeMappings).map((t) => (
+                    <button
+                      key={t}
+                      onClick={() => setComplaintType(t)}
+                      className={`px-3 py-1 rounded-md text-xs font-medium shadow-sm transition
+              ${
+                complaintType === t
+                  ? "bg-[#198657] text-white"
+                  : "bg-[#E5F4EC] text-eco-green-dark hover:bg-[#198657] hover:text-white"
+              }`}
+                    >
+                      {typeMappings[t]}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
