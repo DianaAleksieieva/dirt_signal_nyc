@@ -298,7 +298,7 @@ export default function AnalysisCharts() {
     );
   }
 
-  const ResourceEfficiencyChart = ({ data }) => {
+const ResourceEfficiencyChart = ({ data }) => {
   return (
     <div className="bg-white/70 rounded-xl shadow-sm p-6 h-[500px]">
       <div className="mb-4">
@@ -318,13 +318,13 @@ export default function AnalysisCharts() {
             name="Basket Density" 
             label={{ value: "Baskets / 1k Pop", position: "insideBottom", offset: -15, fontSize: 12 }} 
           />
-          
           <YAxis 
             type="number" 
             dataKey="Complaints_Per_1k" 
             name="Complaints" 
             label={{ value: "Complaints / 1k Pop", angle: -90, position: "insideLeft", style: { textAnchor: 'middle' } }} 
           />
+
           <ZAxis 
             type="number" 
             dataKey="Pedestrian_Count" 
@@ -332,7 +332,6 @@ export default function AnalysisCharts() {
             name="Pedestrians" 
           />
           
-          {/* Tooltip */}
           <Tooltip cursor={{ strokeDasharray: "3 3" }} content={({ active, payload }) => {
             if (active && payload && payload.length) {
               const d = payload[0].payload;
@@ -353,28 +352,17 @@ export default function AnalysisCharts() {
             return null;
           }} />
 
-          <Scatter name="Districts" data={data}>
-            {data.map((entry, index) => (
-              <Cell 
-                key={`cell-${index}`} 
-                fill={BOROUGH_COLORS[entry.Borough] || "#888"} 
-                fillOpacity={0.7}
-                stroke="#fff"
-                strokeWidth={1}
-              />
-            ))}
-          </Scatter>
+          {Object.keys(BOROUGH_COLORS).map((borough) => (
+            <Scatter 
+              key={borough}
+              name={borough} 
+              data={data.filter(d => d.Borough === borough)} 
+              fill={BOROUGH_COLORS[borough]} 
+              fillOpacity={0.7}
+            />
+          ))}
           
-          <Legend 
-            verticalAlign="top" 
-            height={36} 
-            payload={Object.keys(BOROUGH_COLORS).map(b => ({
-              value: b,
-              type: 'circle',
-              id: b,
-              color: BOROUGH_COLORS[b]
-            }))}
-          />
+          <Legend verticalAlign="top" height={36} />
 
         </ScatterChart>
       </ResponsiveContainer>
