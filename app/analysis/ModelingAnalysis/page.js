@@ -21,7 +21,7 @@ import {
 const SeasonalityChart = ({ data }) => (
   <div className="bg-white/70 rounded-xl shadow-sm p-6 h-[400px]">
     <h3 className="text-lg font-bold text-gray-700 mb-4">
-      Seasonality: Complaints vs. Waste
+      Seasonality: Complaints
     </h3>
     <ResponsiveContainer width="100%" height="90%">
       <ComposedChart data={data}>
@@ -35,12 +35,12 @@ const SeasonalityChart = ({ data }) => (
           domain={[2, 7]}
           label={{ value: "Complaints", angle: -90, position: "insideLeft" }}
         />
-        <YAxis
+        {/* <YAxis
           yAxisId="right"
           domain={[3500, 5000]}
           orientation="right"
           label={{ value: "Refuse Tons", angle: 90, position: "insideRight" }}
-        />
+        /> */}
         <Tooltip />
         <Legend />
         <Line
@@ -52,7 +52,7 @@ const SeasonalityChart = ({ data }) => (
           dot={{ r: 4 }}
           name="Avg Complaints"
         />
-        <Line
+        {/* <Line
           yAxisId="right"
           type="linear"
           dataKey="Refuse_Tons"
@@ -61,7 +61,7 @@ const SeasonalityChart = ({ data }) => (
           dot={{ r: 4 }}
           shape="square"
           name="Refuse (Tons)"
-        />
+        /> */}
       </ComposedChart>
     </ResponsiveContainer>
   </div>
