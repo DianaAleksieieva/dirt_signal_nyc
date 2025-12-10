@@ -70,7 +70,7 @@ const SeasonalityChart = ({ data }) => (
 const BOROUGH_COLORS = {
   MN: "#198657",
   BX: "#e00000",
-  BK: "#76d917",
+  BK: "#bb12d5ff",
   QN: "#ff8a00",
   SI: "#2e86de",
 };
