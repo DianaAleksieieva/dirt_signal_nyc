@@ -15,6 +15,7 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
+  Cell
 } from "recharts";
 
 const SeasonalityChart = ({ data }) => (
@@ -31,7 +32,7 @@ const SeasonalityChart = ({ data }) => (
         />
         <YAxis
           yAxisId="left"
-          domain={[50, 85]}
+          domain={[2, 7]}
           label={{ value: "Complaints", angle: -90, position: "insideLeft" }}
         />
         <YAxis
@@ -297,10 +298,95 @@ export default function AnalysisCharts() {
     );
   }
 
+  const ResourceEfficiencyChart = ({ data }) => {
+  return (
+    <div className="bg-white/70 rounded-xl shadow-sm p-6 h-[500px]">
+      <div className="mb-4">
+        <h3 className="text-lg font-bold text-gray-700">Infrastructure vs. Complaints (Weighted by Traffic)</h3>
+        <p className="text-xs text-gray-500">
+          X: Basket Density | Y: Complaints | <span className="font-bold text-gray-800">Bubble Size: Pedestrian Traffic</span>
+        </p>
+      </div>
+
+      <ResponsiveContainer width="100%" height="90%">
+        <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 10 }}>
+          <CartesianGrid strokeDasharray="3 3" opacity={0.5} />
+          
+          <XAxis 
+            type="number" 
+            dataKey="Baskets_Per_1k" 
+            name="Basket Density" 
+            label={{ value: "Baskets / 1k Pop", position: "insideBottom", offset: -15, fontSize: 12 }} 
+          />
+          
+          <YAxis 
+            type="number" 
+            dataKey="Complaints_Per_1k" 
+            name="Complaints" 
+            label={{ value: "Complaints / 1k Pop", angle: -90, position: "insideLeft", style: { textAnchor: 'middle' } }} 
+          />
+          <ZAxis 
+            type="number" 
+            dataKey="Pedestrian_Count" 
+            range={[50, 800]} 
+            name="Pedestrians" 
+          />
+          
+          {/* Tooltip */}
+          <Tooltip cursor={{ strokeDasharray: "3 3" }} content={({ active, payload }) => {
+            if (active && payload && payload.length) {
+              const d = payload[0].payload;
+              return (
+                <div className="bg-white/95 p-3 border border-gray-100 rounded-lg shadow-xl text-xs">
+                  <div className="flex items-center gap-2 mb-2 border-b pb-1">
+                    <div className="w-2 h-2 rounded-full" style={{background: BOROUGH_COLORS[d.Borough]}}></div>
+                    <span className="font-bold">{d.CD_ID}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+                    <span className="text-gray-500">Baskets:</span> <span className="font-mono">{d.Baskets_Per_1k.toFixed(2)}</span>
+                    <span className="text-gray-500">Complaints:</span> <span className="font-mono">{d.Complaints_Per_1k.toFixed(1)}</span>
+                    <span className="text-gray-500 font-bold">Traffic:</span> <span className="font-mono font-bold">{Math.round(d.Pedestrian_Count)}</span>
+                  </div>
+                </div>
+              );
+            }
+            return null;
+          }} />
+
+          <Scatter name="Districts" data={data}>
+            {data.map((entry, index) => (
+              <Cell 
+                key={`cell-${index}`} 
+                fill={BOROUGH_COLORS[entry.Borough] || "#888"} 
+                fillOpacity={0.7}
+                stroke="#fff"
+                strokeWidth={1}
+              />
+            ))}
+          </Scatter>
+          
+          <Legend 
+            verticalAlign="top" 
+            height={36} 
+            payload={Object.keys(BOROUGH_COLORS).map(b => ({
+              value: b,
+              type: 'circle',
+              id: b,
+              color: BOROUGH_COLORS[b]
+            }))}
+          />
+
+        </ScatterChart>
+      </ResponsiveContainer>
+    </div>
+  );
+};
+
   return (
     <div className="w-full grid grid-cols-1 md:grid-cols-1 gap-6 my-8">
-      {/* <CorrelationMatrix data={data.correlation} /> */}
+      <CorrelationMatrix data={data.correlation} />
       <ResourceScatterChart data={data.scatter} />
+      <ResourceEfficiencyChart data={data.scatter} />
       <SeasonalityChart data={data.seasonality} />
       {/* <CompareBarChart data={data.siComparison} /> */}
     </div>
