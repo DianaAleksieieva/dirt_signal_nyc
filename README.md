@@ -1,41 +1,142 @@
 # DirtSignal
-DirtSignal is an interactive platform that maps NYC’s cleanliness patterns in real time. It combines 311 trash reports and litter basket locations. The project discovers underserved areas, showing where streets get dirtiest fastest, and helping citizens and planners make smarter, cleaner decisions for the city.
+New York is an incredibly beautiful place. But every visitor and local can agree that cleanliness problems are one of the most visible in the city. An analysis of the tonnage of garbage for 2024 shows that 8,147 garbage are collected from residential buildings every day. To better understand why problems with street cleanliness are still present despite the huge work that the DSNY does. To understand this, we decided to analyze 311 complaints related to cleanliness.
 
 Live page: https://dirtsignalnyc.vercel.app/
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Data Sources:
+***New York City Population by Community Districts***
+Provides population estimates by community district.
+Source: https://data.cityofnewyork.us/City-Government/New-York-City-Population-By-Community-Districts/xi7c-iiu2
 
-## Getting Started
 
-First, run the development server:
+***DSNY Monthly Tonnage Data***
+Contains monthly records of waste collected by the Department of Sanitation.
+Source: https://data.cityofnewyork.us/City-Government/DSNY-Monthly-Tonnage-Data/ebb7-mvp5/about_data
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+***DSNY Litter Basket Locations***
+Dataset of public litter basket locations.  
+Source: https://data.cityofnewyork.us/Environment/DSNY-Litter-Basket-Map-/d6m8-cwh9
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+***NYC 311 Trash Reports***
+Records of sanitation-related complaints submitted through the 311 system.
+Source: https://data.cityofnewyork.us/Social-Services/311-trash-reports/h2g7-xbpj/about_data
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+***Bi-Annual Pedestrian Counts***
+Measures pedestrian foot traffic at selected locations across NYC.
+Source: https://data.cityofnewyork.us/Transportation/Bi-Annual-Pedestrian-Counts/2de2-6x2h
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+***OpenStreetMap (OSM)***
+Provides NYC census tract and neighborhood boundary data, used for spatial aggregation, geographic joins, and map visualization.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## Libraries Used: 
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+***Next.js*** A React-based framework for building web applications
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+***Vercel*** Deployment and hosting platform for continuous integration and production delivery
+
+***Leaflet*** An interactive mapping library used for rendering spatial layers and geographic overlays
+
+***React-Leaflet*** React bindings for Leaflet, enabling modular and component-based map layers
+
+***Recharts*** Charting library used for interactive data visualizations, including line charts, bar charts, and trend analysis
+
+
+## Project Components: 
+### 1. Analysis Dashboard
+The Analysis section provides exploratory data analysis and summary insights before users interact with the map. The section includes:
+
+***1.1. DSNY Tonnage Analysis. ***
+This component analyzes waste collection volumes in New York City boroughs.
+Annual DSNY waste tonnage by community borough
+Waste volume comparisons between boroughs and districts
+Tonnage trends over time
+
+***1.2. 311 Sanitation Complaints Analysis ***
+This component examines sanitation issues reported by residents.
+Total number of complaints and number of complaints by category (collection, sweeping, trash removal)
+Temporal trends and seasonality of sanitation complaints
+Comparison of complaint intensity across boroughs
+Identification of high-complaint areas and dominant complaint categories
+
+***1.3. Analysis of Top Cleanliness Issues***
+This component identifies the most common sanitation issues faced by each borough.
+Analyzing how pedestrian traffic affects litter complaints
+
+### 2. ​​Interactive Map 
+The Map section is the project’s primary research tool. It uses multi-layered geospatial visualizations to explore sanitation status at the neighborhood and census tract levels. Users can toggle between multiple map layers, adjust time ranges, and explore different cleanliness metrics.
+
+***2.1 DSNY Monthly Waste Data Layer***
+Visualizes the distribution of waste tonnage across New York City’s public neighborhoods.
+Monthly and annual total waste collections
+Relative differences in waste volumes across neighborhoods
+Identifies high-waste neighborhoods
+
+***2.2 311 Sanitation Complaints Layer***
+Represents sanitation issues reported by residents as an indicator of perceived street cleanliness. 
+Complaints Density by Census Tract
+Filters by complaint type (collection, sweeping, basket issues)
+Time period: 2010-2025
+
+***2.3 Top Sanitation Issues Layer (“Common Issues”)***
+Identifies the dominant sanitation issue in each borough.
+Winner-take-all classification of the most common complaint types by borough
+Color-coded categories (missed collection, overflow, street cleaning)
+
+***2.4 DSNY Trash Can Layer***
+Shows the spatial distribution of public trash cans throughout New York City.
+Location of DSNY-operated trash cans
+
+
+## Methodology
+
+CleanSight NYC uses several public datasets, such as NYC 311 sanitation complaints, monthly DSNY waste tonnage records, trash can locations, and pedestrian traffic, to investigate the problems and extent of New York City’s trash situation.
+
+The 311 trash-related complaints dataset contains over 1.7 million requests. We used reports submitted between January 2010 and December 2025 to analize complaint types and density by neighborhood. Complaints were categorized into major issue types, including trash collection, litter baskets, and street sweeping, to allow comparison across different kinds of sanitation problems.
+
+For spatial analysis and visualization, individual complaints were aggregated at the New York City census tract level
+
+Monthly DSNY tonnage data is also included to better understand the extent of cleanup. This dataset captures the amount of waste collected each month, by waste category, and by community area. Tonnage values ​​were analyzed both overall and normalized by population.
+
+Geographic boundaries were obtained from census tracts and OpenStreetMap neighborhood shapefiles.
+
+To assess sanitation infrastructure, DSNY trash can location data was overlaid on complaint and problem layers. In addition, pedestrian counts were used as an indicator of human activity and foot traffic, which helps analyze sanitation problems driven by pedestrian volume.
+
+Analytics have been added to the "analysis" dashboard. Spatial analysis is presented using several interactive map layers. These include complaint density maps, waste tonnage maps, and a dominant problem layer that assigns the most frequently reported sanitation problem to each neighborhood.
+
+
+## Key Findings
+
+***Volume of Household Waste***
+
+The analysis shows that boroughs such as Queens, Staten Island, and Brooklyn have higher per capita waste tonnage than Manhattan. The reasons for this may be the type of housing. In private homes, there is more space for garbage collection, so people buy more and end up throwing away more. In areas with high population density, people have less space per capita, so they accumulate less garbage, and the tonnage of waste is lower.
+
+***311 Patterns of Sanitation Complaints***
+
+Littering problems dominate the complaint data compared to complaints about street cleaning and problems with trash cans. This does not mean that there are fewer problems with street litter. People simply do not complain about problems in their neighborhood, while problems with litter near their own homes are the subject of many complaints. In some neighborhoods, an entire year may include only a few complaints about cleaning, even if the neighborhood actually has significant street litter problems.
+
+***Neighborhood-specific sanitation issues***
+
+Most often, residents of the districts report complaints that garbage is not collected. Therefore, the problem of uncollected garbage is predominant over the problems of the layer map. Some neighborhoods have problems with complaints about garbage cans. After analyzing the density of garbage cans in these districts, it can be said that the presence of one can may not be enough in some areas because they still suffer from overflow.
+
+
+## Our Solutions
+Make sanitation data visible. The platform allows residents to investigate sanitation complaints in their own neighborhoods. By comparing the complaints registered with the daily conditions on the streets, users can conclude that the sanitation department is not receiving enough reports to influence improvements.
+
+Encourage more people to report sanitation issues. Adding complaints to the 311 database allows for documentation of residents’ dissatisfaction with the cleanliness of the streets. Without adding complaints, these issues will not be addressed.
+
+Promote the sanitation features of the 311 service. Advertising and showcasing the features for reporting street sweeping, street litter, and overflowing bins will help engage more people in monitoring the cleanliness status.
+
+By analyzing the data visualization in their own neighborhood, the project shows the need for greater involvement of residents. In the future, volunteer initiatives can be provided to increase cleanliness reports.
+
+Pointing out issues to the Sanitation Department and neighborhood policymakers. The interactive platform allows you to analyze problems in the New York City census tract, showing where infrastructure problems exist, what complaints are most common, and where household waste levels are highest. By identifying areas with consistently high complaint rates or high volumes of waste, the project helps determine where DSNY needs to allocate more resources to combat litter.
+
+The platform also aims to create programs to reduce household waste. By visualizing how much household waste is collected in each neighborhood, we motivate residents to reconsider their habits of accumulating unnecessary things and then throwing them away. Local organizations can use this data to plan education campaigns aimed at reducing waste in areas with high trash tonnage.
+
+
+## About Us:
+
+CleanSight NYC is a data-driven student project developed as part of a data visualization course. The project aims to show neighborhood cleanliness and litter collection issues in order to engage the community in solving litter problems. The research results can be used to inform policy decisions, analyze neighborhood complaint rates, and encourage people to complain more to improve neighborhood conditions. Our team: https://dirtsignalnyc.vercel.app/team
