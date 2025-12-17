@@ -3,57 +3,65 @@ New York is an incredibly beautiful place. But every visitor and local can agree
 
 Live page: https://dirtsignalnyc.vercel.app/
 
+## Table of Contents
+
+- [DirtSignal](#dirtsignal)
+- [Live Page](#live-page)
+- [Data Sources](#data-sources)
+- [Libraries Used](#libraries-used)
+- [Project Components](#project-components)
+- [Methodology](#methodology)
+- [Key Findings](#key-findings)
+- [Our Solutions](#our-solutions)
+- [About Us](#about-us)
+
+
 ## Data Sources:
-***New York City Population by Community Districts***
+__New York City Population by Community Districts__
 
-Provides population estimates by community district.
-
-Source: https://data.cityofnewyork.us/City-Government/New-York-City-Population-By-Community-Districts/xi7c-iiu2
-
-
-***DSNY Monthly Tonnage Data***
-
-Contains monthly records of waste collected by the Department of Sanitation.
-
-Source: https://data.cityofnewyork.us/City-Government/DSNY-Monthly-Tonnage-Data/ebb7-mvp5/about_data
+Provides population estimates by community district.\
+https://data.cityofnewyork.us/City-Government/New-York-City-Population-By-Community-Districts/xi7c-iiu2
 
 
-***DSNY Litter Basket Locations***
+__DSNY Monthly Tonnage Data__
 
-Dataset of public litter basket locations.  
-
-Source: https://data.cityofnewyork.us/Environment/DSNY-Litter-Basket-Map-/d6m8-cwh9
-
-
-***NYC 311 Trash Reports***
-
-Records of sanitation-related complaints submitted through the 311 system.
-
-Source: https://data.cityofnewyork.us/Social-Services/311-trash-reports/h2g7-xbpj/about_data
+Contains monthly records of waste collected by the Department of Sanitation.\
+https://data.cityofnewyork.us/City-Government/DSNY-Monthly-Tonnage-Data/ebb7-mvp5/about_data
 
 
-***Bi-Annual Pedestrian Counts***
+__DSNY Litter Basket Locations__
 
-Measures pedestrian foot traffic at selected locations across NYC.
+Dataset of public litter basket locations.\
+https://data.cityofnewyork.us/Environment/DSNY-Litter-Basket-Map-/d6m8-cwh9
 
-Source: https://data.cityofnewyork.us/Transportation/Bi-Annual-Pedestrian-Counts/2de2-6x2h
 
-***OpenStreetMap (OSM)***
+__NYC 311 Trash Reports__
+
+Records of sanitation-related complaints submitted through the 311 system.\
+https://data.cityofnewyork.us/Social-Services/311-trash-reports/h2g7-xbpj/about_data
+
+
+__Bi-Annual Pedestrian Counts__
+
+Measures pedestrian foot traffic at selected locations across NYC.\
+https://data.cityofnewyork.us/Transportation/Bi-Annual-Pedestrian-Counts/2de2-6x2h
+
+__OpenStreetMap (OSM)__
 
 Provides NYC census tract and neighborhood boundary data, used for spatial aggregation, geographic joins, and map visualization.
 
 
 ## Libraries Used: 
 
-***Next.js*** A React-based framework for building web applications
+***Next.js.*** A React-based framework for building web applications
 
-***Vercel*** Deployment and hosting platform for continuous integration and production delivery
+***Vercel.*** Deployment and hosting platform for continuous integration and production delivery
 
-***Leaflet*** An interactive mapping library used for rendering spatial layers and geographic overlays
+***Leaflet.*** An interactive mapping library used for rendering spatial layers and geographic overlays
 
-***React-Leaflet*** React bindings for Leaflet, enabling modular and component-based map layers
+***React-Leaflet.*** React bindings for Leaflet, enabling modular and component-based map layers
 
-***Recharts*** Charting library used for interactive data visualizations, including line charts, bar charts, and trend analysis
+***Recharts.*** Charting library used for interactive data visualizations, including line charts, bar charts, and trend analysis
 
 
 ## Project Components: 
