@@ -24,7 +24,6 @@ export default function MajorIssuesLayer({
   endMonth,
 }) {
 
-  // useMemo returns an object: { stats: Map, dynamicCap: number }
   const { stats, dynamicCap } = useMemo(() => {
     if (!complaints || !population) return { stats: new Map(), dynamicCap: 1 };
 
@@ -55,7 +54,6 @@ export default function MajorIssuesLayer({
       }
     }
 
-    // Calculate per-NTA stats
     for (const [ntaCode, cats] of Object.entries(tempAgg)) {
       let maxCount = -1;
       let dominantType = "Other";
@@ -69,7 +67,6 @@ export default function MajorIssuesLayer({
         }
       }
 
-      // Population lookup (using CDID fallback logic)
       const cdid = ntaCode.substring(0, 4);
       const pop = population[cdid] || 1; 
       
@@ -82,7 +79,6 @@ export default function MajorIssuesLayer({
       statsMap.set(ntaCode, { dominantType, intensity, pop, cdid, maxCount, totalComplaints});
     }
 
-    // Calculate Dynamic Cap (95th percentile)
     let calculatedCap = 1;
     if (allIntensities.length > 0) {
       allIntensities.sort((a, b) => a - b);
@@ -90,7 +86,6 @@ export default function MajorIssuesLayer({
       calculatedCap = allIntensities[p95Index];
     }
     
-    // Safety check for very low data scenarios
     if (calculatedCap < 0.1) calculatedCap = 1;
 
     return { stats: statsMap, dynamicCap: calculatedCap };

@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import Papa from "papaparse";
 import dynamic from "next/dynamic";
 
-// Dynamically import MarkerClusterGroup (fix SSR issues)
 const MarkerClusterGroup = dynamic(
   async () => (await import("react-leaflet-cluster")).default,
   { ssr: false }
@@ -15,7 +14,6 @@ export default function MapBinsLayer({ zoom }) {
   const [CircleMarker, setCircleMarker] = useState(null);
   const [Tooltip, setTooltip] = useState(null);
 
-  // --- Load react-leaflet components dynamically ---
   useEffect(() => {
     async function load() {
       const rl = await import("react-leaflet");
@@ -25,7 +23,6 @@ export default function MapBinsLayer({ zoom }) {
     load();
   }, []);
 
-  // --- Load & parse CSV file ---
   useEffect(() => {
     Papa.parse("/data/bins/DSNY_Litter_Basket_Inventory.csv", {
       download: true,
@@ -35,7 +32,6 @@ export default function MapBinsLayer({ zoom }) {
           .map((row) => {
             if (!row.point) return null;
 
-            // "POINT (-73.98 40.74)"
             const match = row.point.match(
               /POINT\s*\(([-0-9.]+)\s+([-0-9.]+)\)/
             );
@@ -64,7 +60,6 @@ export default function MapBinsLayer({ zoom }) {
 
   if (!CircleMarker || !Tooltip) return null;
 
-  // ZOOM 
   const SHOW_INDIVIDUAL_POINTS_ZOOM = 15;
   const showPoints = zoom >= SHOW_INDIVIDUAL_POINTS_ZOOM;
 

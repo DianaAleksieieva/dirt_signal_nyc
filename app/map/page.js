@@ -11,7 +11,6 @@ export default function MapPage() {
 
   const [complaintType, setComplaintType] = useState("All");
 
-  // Date range state
   const [startYear, setStartYear] = useState(2010);
   const [startMonth, setStartMonth] = useState(1);
   const [endYear, setEndYear] = useState(2025);
@@ -145,7 +144,6 @@ export default function MapPage() {
             </div>
           </div>
 
-          {/* SECOND-LEVEL FILTERS FOR 311 */}
           {/* SECOND-LEVEL FILTERS FOR 311 */}
           {["311", "issues"].includes(layer) && (
             <div className="mb-4 flex flex-wrap items-center gap-6">

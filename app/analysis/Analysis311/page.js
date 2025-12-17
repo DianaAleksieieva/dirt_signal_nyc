@@ -148,7 +148,7 @@ export default function Analysis311() {
     return map;
   }, [tracts]);
 
-  /** ⭐ UPDATED: Complaints by Borough (AVERAGE) **/
+  /** Complaints by Borough **/
   const complaintsByBorough = useMemo(() => {
     if (!complaints) return [];
 
@@ -184,7 +184,7 @@ export default function Analysis311() {
       .sort((a, b) => b.average - a.average);
   }, [complaints, boroughLookup, boroStartYear]);
 
-  /** Complaints by Borough (BY TYPE) **/
+  /** Complaints by Borough by type **/
   const boroughByType = useMemo(() => {
     if (!complaints || !boroughLookup) return [];
 
@@ -217,7 +217,7 @@ export default function Analysis311() {
     });
   }, [complaints, boroughLookup]);
 
-  /** BarChart → typeBreakdown **/
+  /** BarChart **/
   const barData = useMemo(() => {
     const row = {};
     typeBreakdown.forEach((t) => (row[t.type] = t.value));
@@ -264,7 +264,7 @@ export default function Analysis311() {
         </button>
       </div>
 
-      {/* ⭐ 1 — Monthly Trend */}
+      {/* Monthly Trend */}
       <div className="bg-white/70 rounded-xl shadow-sm p-6 h-[330px] mb-10">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-lg font-semibold text-eco-green-dark">
@@ -329,7 +329,7 @@ export default function Analysis311() {
         </ResponsiveContainer>
       </div>
 
-      {/* ⭐ 2 — Type Breakdown */}
+      {/* Type Breakdown */}
       <div className="bg-white/70 rounded-xl shadow-sm p-6 h-[300px] mb-10">
         <h2 className="text-lg font-semibold text-eco-green-dark mb-3">
           Total Complaints by Type
@@ -350,7 +350,7 @@ export default function Analysis311() {
         </ResponsiveContainer>
       </div>
 
-      {/* ⭐ 3 — Yearly Trend */}
+      {/* Yearly Trend */}
       <div className="bg-white/70 rounded-xl shadow-sm p-6 h-[330px] mb-10">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-lg font-semibold text-eco-green-dark">
@@ -438,7 +438,7 @@ export default function Analysis311() {
         </ResponsiveContainer>
       </div>
 
-      {/* ⭐ 4 — Complaints by Borough (Average) */}
+      {/* Complaints by Borough (Average) */}
       <div className="bg-white/70 rounded-xl shadow-sm p-6 h-[330px] mb-10">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-lg font-semibold text-eco-green-dark">
@@ -483,7 +483,7 @@ export default function Analysis311() {
         </ResponsiveContainer>
       </div>
 
-      {/* ⭐ 5 — Complaints by Borough (By Type Breakdown) */}
+      {/* Complaints by Borough */}
       <div className="bg-white/70 rounded-xl shadow-sm p-6 h-[330px] mb-10">
         <h2 className="text-lg font-semibold text-eco-green-dark mb-3">
           Complaints by Borough — By Type

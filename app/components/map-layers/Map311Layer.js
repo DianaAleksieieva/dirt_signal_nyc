@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef } from "react";
 import { scaleQuantile } from "d3-scale";
 import { GeoJSON } from "react-leaflet";
 
-// color scale for complaint counts
+// color scale for complaint 
 const COUNT_PALETTE = [
   "#f7fcf5",
   "#e5f5e0",
@@ -27,7 +27,7 @@ export default function Map311Layer({
   endYear,
   endMonth,
 }) {
-  // Memoize the calculation of complaint counts
+
   const complaintsByGeoID = useMemo(() => {
     if (!allComplaints || !complaintType) return new Map();
 
@@ -69,7 +69,6 @@ export default function Map311Layer({
     if (counts.length === 0) {
       return null;
     }
-    // Using slice(1) to keep the first color for 0 counts.
     return scaleQuantile().domain(counts).range(COUNT_PALETTE.slice(1));
   }, [complaintsByGeoID]);
 

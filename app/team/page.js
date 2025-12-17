@@ -6,25 +6,21 @@ import { FaGithub } from "react-icons/fa";
 const team = [
   {
     name: "Diana Aleksieieva",
-    // role: "Data Scientist & Full-Stack Engineer",
     img: "/team/77931188.jpeg", 
     github: "https://github.com/DianaAleksieieva",
   },
   {
     name: "Hao Zhu",
-    // role: "Backend Engineer",
     img: "/team/14314312.jpeg",
     github: "https://github.com/Arden-Zhu",
   },
   {
     name: "Hong Zhao",
-    // role: "Frontend Developer",
     img: "/team/1760126358872.jpeg",
     github: "https://github.com/HongGith",
   },
   {
     name: "Cindy Zhao",
-    // role: "Data Analyst",
     img: "/team/59320097.jpeg",
     github: "https://github.com/cindy-zhaoxy",
   },
@@ -49,7 +45,6 @@ export default function TeamPage() {
             key={member.name}
             className="bg-white shadow-md rounded-xl p-6 flex flex-col items-center text-center hover:shadow-lg transition"
           >
-            {/* PROFILE IMAGE (optional) */}
             <div className="w-28 h-28 mb-4 rounded-full bg-eco-green-soft overflow-hidden flex items-center justify-center">
               {member.img ? (
                 <img
@@ -64,13 +59,11 @@ export default function TeamPage() {
               )}
             </div>
 
-            {/* NAME + ROLE */}
             <h3 className="text-lg font-semibold text-eco-green-dark">
               {member.name}
             </h3>
             <p className="text-sm text-eco-text-dark/70 mb-3">{member.role}</p>
 
-            {/* GITHUB LINK */}
             <Link
               href={member.github}
               target="_blank"
@@ -83,7 +76,6 @@ export default function TeamPage() {
         ))}
       </div>
 
-      {/* BACK TO HOME */}
       <div className="mt-12 text-center">
         <Link
           href="/"
