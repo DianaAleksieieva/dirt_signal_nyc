@@ -5,30 +5,41 @@ Live page: https://dirtsignalnyc.vercel.app/
 
 ## Data Sources:
 ***New York City Population by Community Districts***
+
 Provides population estimates by community district.
+
 Source: https://data.cityofnewyork.us/City-Government/New-York-City-Population-By-Community-Districts/xi7c-iiu2
 
 
 ***DSNY Monthly Tonnage Data***
+
 Contains monthly records of waste collected by the Department of Sanitation.
+
 Source: https://data.cityofnewyork.us/City-Government/DSNY-Monthly-Tonnage-Data/ebb7-mvp5/about_data
 
 
 ***DSNY Litter Basket Locations***
+
 Dataset of public litter basket locations.  
+
 Source: https://data.cityofnewyork.us/Environment/DSNY-Litter-Basket-Map-/d6m8-cwh9
 
 
 ***NYC 311 Trash Reports***
+
 Records of sanitation-related complaints submitted through the 311 system.
+
 Source: https://data.cityofnewyork.us/Social-Services/311-trash-reports/h2g7-xbpj/about_data
 
 
 ***Bi-Annual Pedestrian Counts***
+
 Measures pedestrian foot traffic at selected locations across NYC.
+
 Source: https://data.cityofnewyork.us/Transportation/Bi-Annual-Pedestrian-Counts/2de2-6x2h
 
 ***OpenStreetMap (OSM)***
+
 Provides NYC census tract and neighborhood boundary data, used for spatial aggregation, geographic joins, and map visualization.
 
 
@@ -49,44 +60,51 @@ Provides NYC census tract and neighborhood boundary data, used for spatial aggre
 ### 1. Analysis Dashboard
 The Analysis section provides exploratory data analysis and summary insights before users interact with the map. The section includes:
 
-***1.1. DSNY Tonnage Analysis. ***
+__DSNY Tonnage Analysis.__
+
 This component analyzes waste collection volumes in New York City boroughs.
 Annual DSNY waste tonnage by community borough
 Waste volume comparisons between boroughs and districts
 Tonnage trends over time
 
-***1.2. 311 Sanitation Complaints Analysis ***
+__311 Sanitation Complaints Analysis__
+
 This component examines sanitation issues reported by residents.
 Total number of complaints and number of complaints by category (collection, sweeping, trash removal)
 Temporal trends and seasonality of sanitation complaints
 Comparison of complaint intensity across boroughs
 Identification of high-complaint areas and dominant complaint categories
 
-***1.3. Analysis of Top Cleanliness Issues***
+__Analysis of Top Cleanliness Issues__
 This component identifies the most common sanitation issues faced by each borough.
 Analyzing how pedestrian traffic affects litter complaints
 
 ### 2. ​​Interactive Map 
+
 The Map section is the project’s primary research tool. It uses multi-layered geospatial visualizations to explore sanitation status at the neighborhood and census tract levels. Users can toggle between multiple map layers, adjust time ranges, and explore different cleanliness metrics.
 
-***2.1 DSNY Monthly Waste Data Layer***
+__DSNY Monthly Waste Data Layer__
+
 Visualizes the distribution of waste tonnage across New York City’s public neighborhoods.
 Monthly and annual total waste collections
 Relative differences in waste volumes across neighborhoods
 Identifies high-waste neighborhoods
 
-***2.2 311 Sanitation Complaints Layer***
+__311 Sanitation Complaints Layer__
+
 Represents sanitation issues reported by residents as an indicator of perceived street cleanliness. 
 Complaints Density by Census Tract
 Filters by complaint type (collection, sweeping, basket issues)
 Time period: 2010-2025
 
-***2.3 Top Sanitation Issues Layer (“Common Issues”)***
+__Top Sanitation Issues Layer (“Common Issues”)__
+
 Identifies the dominant sanitation issue in each borough.
 Winner-take-all classification of the most common complaint types by borough
 Color-coded categories (missed collection, overflow, street cleaning)
 
-***2.4 DSNY Trash Can Layer***
+__DSNY Trash Can Layer__
+
 Shows the spatial distribution of public trash cans throughout New York City.
 Location of DSNY-operated trash cans
 
@@ -110,20 +128,21 @@ Analytics have been added to the "analysis" dashboard. Spatial analysis is prese
 
 ## Key Findings
 
-***Volume of Household Waste***
+__Volume of Household Waste__
 
 The analysis shows that boroughs such as Queens, Staten Island, and Brooklyn have higher per capita waste tonnage than Manhattan. The reasons for this may be the type of housing. In private homes, there is more space for garbage collection, so people buy more and end up throwing away more. In areas with high population density, people have less space per capita, so they accumulate less garbage, and the tonnage of waste is lower.
 
-***311 Patterns of Sanitation Complaints***
+__311 Patterns of Sanitation Complaints__
 
 Littering problems dominate the complaint data compared to complaints about street cleaning and problems with trash cans. This does not mean that there are fewer problems with street litter. People simply do not complain about problems in their neighborhood, while problems with litter near their own homes are the subject of many complaints. In some neighborhoods, an entire year may include only a few complaints about cleaning, even if the neighborhood actually has significant street litter problems.
 
-***Neighborhood-specific sanitation issues***
+__Neighborhood-specific sanitation issues__
 
 Most often, residents of the districts report complaints that garbage is not collected. Therefore, the problem of uncollected garbage is predominant over the problems of the layer map. Some neighborhoods have problems with complaints about garbage cans. After analyzing the density of garbage cans in these districts, it can be said that the presence of one can may not be enough in some areas because they still suffer from overflow.
 
 
 ## Our Solutions
+
 Make sanitation data visible. The platform allows residents to investigate sanitation complaints in their own neighborhoods. By comparing the complaints registered with the daily conditions on the streets, users can conclude that the sanitation department is not receiving enough reports to influence improvements.
 
 Encourage more people to report sanitation issues. Adding complaints to the 311 database allows for documentation of residents’ dissatisfaction with the cleanliness of the streets. Without adding complaints, these issues will not be addressed.
