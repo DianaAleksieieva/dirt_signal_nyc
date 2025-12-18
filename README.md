@@ -1,5 +1,5 @@
 # CleanSight
-New York is an incredibly beautiful place. But every visitor and local can agree that cleanliness problems are one of the most visible in the city. An analysis of the tonnage of garbage for 2024 shows that 8,147 garbage are collected from residential buildings every day. To better understand why problems with street cleanliness are still present despite the huge work that the DSNY does. To understand this, we decided to analyze 311 complaints related to cleanliness.
+New York is an incredibly beautiful place. But every visitor and local can agree that cleanliness problems are one of the most visible in the city. An analysis of the tonnage of garbage for 2024 shows that 8,147 garbage are collected from residential buildings every day. To better understand why street cleanliness issues still exist despite the great work DSNY does, we decided to analyze 311 cleanliness-related complaints.
 
 Live page: https://dirtsignalnyc.vercel.app/
 
