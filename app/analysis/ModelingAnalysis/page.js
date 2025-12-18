@@ -374,7 +374,7 @@ const ResourceEfficiencyChart = ({ data }) => {
     <div className="w-full grid grid-cols-1 md:grid-cols-1 gap-6 my-8">
       <CorrelationMatrix data={data.correlation} />
       <ResourceScatterChart data={data.scatter} />
-      <ResourceEfficiencyChart data={data.scatter} />
+      {/* <ResourceEfficiencyChart data={data.scatter} /> */}
       <SeasonalityChart data={data.seasonality} />
       {/* <CompareBarChart data={data.siComparison} /> */}
     </div>
