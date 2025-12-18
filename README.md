@@ -131,6 +131,12 @@ Littering problems dominate the complaint data compared to complaints about stre
 __Neighborhood-specific sanitation issues__\
 Most often, residents of the districts report complaints that garbage is not collected. Therefore, the problem of uncollected garbage is predominant over the problems of the layer map. Some neighborhoods have problems with complaints about garbage cans. After analyzing the density of garbage cans in these districts, it can be said that the presence of one can may not be enough in some areas because they still suffer from overflow.
 
+__Seasonality and Structural Increase in Litter Basket Complaints__
+Litter basket (“Basket”) complaints exhibit a consistent 12-month seasonal cycle, with higher volumes typically occurring from late spring through early fall. However, the data show a pronounced disruption in July 2020, after which complaint levels did not return to the pre-2020 baseline. Using the user’s summary statistics, average monthly basket complaints increased from 326.9 (2010–2019) to 425.4 (2020–2025), representing an approximately 30.12% structural rise.
+ 
+__Complaint Surges and Category Shifts Correspond to Operational and Policy Changes__
+Several major shifts in complaint volume align with identifiable city operational conditions. The October 2021 complaint spike is consistent with a period of service disruption associated with labor shortages and reported work slowdowns around the municipal COVID-19 vaccine mandate. In addition, the “Bulky Items” complaint category effectively disappears after April 2022, consistent with a policy or process change in bulky item pickup and/or how related issues are recorded, with remaining problems more likely captured under broader “Missed Collection” categories.
+
 
 ## Our Solutions
 
