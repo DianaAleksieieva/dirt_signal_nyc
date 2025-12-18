@@ -83,7 +83,19 @@ export default function MapPage() {
   ];
 
   return (
-    <div className=" mt-3 h-[calc(100vh-6rem)] overflow-hidden bg-eco-beige text-eco-text px-6 pb-6 pt-0">
+    <div
+      className="
+    mt-3
+    bg-eco-beige text-eco-text
+    px-4 lg:px-6
+    pb-6 pt-0
+
+    min-h-screen overflow-auto
+    lg:min-h-0
+    lg:h-[calc(100vh-6rem)]
+    lg:overflow-hidden
+  "
+    >
       <div className="h-full flex flex-col lg:flex-row gap-6">
         {/* MAP SECTION */}
         <div className="lg:w-4/5 w-full flex flex-col h-[70vh] lg:h-[80vh]">

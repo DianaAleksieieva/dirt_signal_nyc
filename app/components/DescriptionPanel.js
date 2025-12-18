@@ -84,9 +84,6 @@ export default function DescriptionPanel({
 
   return (
     <div className="lg:w-1/4 w-full bg-eco-green-soft p-5 rounded-xl shadow-sm space-y-5 h-[70vh] lg:h-[80vh] overflow-y-auto">
-      {/* <h2 className="text-xl font-semibold text-eco-green-dark">
-        NYC Cleanliness
-      </h2> */}
 
       {(layer == "trash") && (
         <>
