@@ -52,7 +52,7 @@ export default function Analysis() {
         {/* LEFT COLUMN */}
         <div>
           <h2 className="text-2xl font-bold text-eco-green-dark mb-4">
-            🌱 DirtSignal NYC
+            🌱 CleanSight NYC
           </h2>
 
           <p className="text-eco-text-dark/80 mb-4">
